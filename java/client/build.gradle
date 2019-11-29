@@ -1,0 +1,30 @@
+plugins {
+    id 'java-library'
+    id 'maven-publish'
+}
+
+jar {
+    baseName = 'ApertureStreaming'
+    manifest {
+        attributes('Implementation-Title': project.name,
+                'Implementation-Version': project.version)
+    }
+}
+
+repositories {
+    jcenter()
+    mavenCentral()
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+        }
+    }
+}
+
+dependencies {
+    implementation 'com.microsoft.signalr:signalr:3.0.0-preview-19075-0444'
+    implementation 'org.slf4j:slf4j-jdk14:1.7.25'
+}
