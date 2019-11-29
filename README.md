@@ -154,11 +154,11 @@ If the connection to Aperture Streaming is not established after retry, Aperture
 
 running `gradle build` from terminal or Intellij will trigger the build for all sub-projects.
 
-![Gradle build](docs/gradle-build.png)
+![Gradle build](docs/gradle-build.PNG)
 
 Each project will generate their respective build binary inside `<module-name>/build/libs/` folder. 
 
-![Build result](docs/build-result.png)
+![Build result](docs/build-result.PNG)
 
 The version of the build will be generated based on the value of semantiVersion defined in gradle.properties.
 
@@ -175,14 +175,14 @@ Checkstyle will be run on every `gradle build`. Any checkstyle **ERROR**-level v
 
 Run `gradle test` to trigger only the JUnit test classes.
 
-![Gradle test](docs/gradle-test.png)
+![Gradle test](docs/gradle-test.PNG)
   
 ### Generating Test Report
 
 We are utilizing Jacoco to generate code coverage report. Run `gradle jacocoFullReport` to generate and consolidate test coverage for all subprojects.
 
-![Jacoco Full Report](docs/gradle-jacoco-full-report.png)
+![Jacoco Full Report](docs/gradle-jacoco-full-report.PNG)
 
 The report will be generated on the root project's `build` folder:
 
-![Jacoco Full Report Location](docs/jacoco-full-report-location.png)
+![Jacoco Full Report Location](docs/jacoco-full-report-location.PNG)
