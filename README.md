@@ -65,7 +65,7 @@ Aperture Streaming SDK has `<Request>Options` for every request. If the consumer
     * AddMetadata = true
     * OutputFormat = E164
     * CacheValueDays = 7
-    * Timeout = 2s
+    * Timeout = 15s
         
 * EnrichmentOptions
 
