@@ -13,7 +13,7 @@ public final class DefaultPhoneValidationOptionsBuilder implements OptionsBuilde
     private final boolean defaultAddMetadata = true;
     private final String defaultOutputFormat = "E164";
     private final int defaultCacheValueDays = 7;
-    private final Duration defaultTimeout = Duration.ofSeconds(2);
+    private final Duration defaultTimeout = Duration.ofSeconds(15);
     private final boolean addMetadata;
     private String outputFormat = defaultOutputFormat;
     private int cacheValueDays = defaultCacheValueDays;
