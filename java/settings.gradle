@@ -1,4 +1,0 @@
-rootProject.name = 'ApertureStreaming'
-include 'client'
-include 'sample'
-
