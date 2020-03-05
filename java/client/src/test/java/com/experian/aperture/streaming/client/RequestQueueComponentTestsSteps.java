@@ -68,7 +68,7 @@ public class RequestQueueComponentTestsSteps {
                 .withKeys(EnrichmentDatasetKeysBuilder.builder().withPin(randomString).build())
                 .withAttributes(EnrichmentDatasetAttributesBuilder.builder().withAusCvPersonList(AusCVPerson.PIN, AusCVPerson.GENDER).build())
                 .build();
-        final EnrichmentOptions options = OptionsBuilder.builder().withEnrichmentOptions(true).build();
+        final EnrichmentOptions options = OptionsBuilder.builder().withEnrichmentOptions(true).withTimeout(Duration.ofSeconds(15)).build();
         final EnrichmentRequestProxy proxy = new EnrichmentRequestProxy(request, options);
         manager.onEnrichmentRequest(proxy);
         return  this;

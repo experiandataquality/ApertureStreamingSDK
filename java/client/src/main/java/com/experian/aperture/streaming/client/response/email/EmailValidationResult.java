@@ -1,5 +1,6 @@
 package com.experian.aperture.streaming.client.response.email;
 
+import com.experian.aperture.streaming.client.response.Result;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
@@ -7,7 +8,7 @@ import java.util.List;
 /**
  * Details about the result. Includes the validated data and its confidence level.
  */
-public final class EmailValidationResult {
+public final class EmailValidationResult implements Result {
     /**
      * The email address that is the subject of the validation.
      * Examples: support@experian.com

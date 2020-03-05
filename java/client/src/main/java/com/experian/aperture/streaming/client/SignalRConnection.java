@@ -19,8 +19,6 @@ final class SignalRConnection implements Connection {
     private Runnable resendCallback;
     private boolean streamingStopIntentionally;
     private final PublishSubject<ConnectionEvent> connectionEventSubject;
-    private final String forbiddenErrorMessage = "Expected HTTP 101 response but was '403 Forbidden'";
-    private final String unauthorizedErrorMessage = "Expected HTTP 101 response but was '401 Unauthorized'";
 
     SignalRConnection(final String url, final String authToken, final RetryOptions retryOptions) {
         this.connection = HubConnectionBuilder
@@ -44,9 +42,9 @@ final class SignalRConnection implements Connection {
         try {
             this.startConnection();
         } catch (final RuntimeException ex) {
-            if (ex.getMessage().contains("404 Not Found")) {
+            if (ex.getMessage().contains(ResourceReader.getErrorMessageWithKey("SignalRNotFoundError"))) {
                 throw new ConnectionException(ErrorCode.NOT_FOUND.getValue());
-            } else if (!ex.getMessage().equals("There was an error starting the WebSocket transport.")) {
+            } else if (!ex.getMessage().equals(ResourceReader.getErrorMessageWithKey("SignalRWebSocketError"))) {
                 // Throw connection that is not related to "starting the WebSocket transport" error.
                 // Note: The related "starting the WebSocket transport" error has been handle in OnClosed method
                 throw new ConnectionException(ex.getMessage());
@@ -97,10 +95,10 @@ final class SignalRConnection implements Connection {
         if (!isInstanceOfRuntimeException) {
             return;
         }
-        if (ex.getMessage().equals(this.forbiddenErrorMessage)) {
+        if (ex.getMessage().equals(ResourceReader.getErrorMessageWithKey("SignalRForbiddenError"))) {
             this.connectionEventSubject.onNext(ConnectionEvent.FORBIDDEN);
             return;
-        } else if (ex.getMessage().equals(this.unauthorizedErrorMessage)) {
+        } else if (ex.getMessage().equals(ResourceReader.getErrorMessageWithKey("SignalRUnauthorizedError"))) {
             this.connectionEventSubject.onNext(ConnectionEvent.UNAUTHORIZED);
             return;
         }

@@ -8,7 +8,7 @@ import com.experian.aperture.streaming.client.proxy.RequestProxyBase;
 public class RateLimitException extends Exception {
     private final RequestProxyBase proxyBase;
 
-    RateLimitException(final RequestProxyBase proxyBase) {
+    public RateLimitException(final RequestProxyBase proxyBase) {
         super(ErrorCode.RATE_LIMIT_ERROR.getValue());
         this.proxyBase = proxyBase;
     }

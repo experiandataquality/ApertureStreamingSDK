@@ -1,16 +1,13 @@
 package com.experian.aperture.streaming.client.request.enrichment;
 
+import com.experian.aperture.streaming.client.ResourceReader;
 import com.experian.aperture.streaming.client.guard.Contract;
+import com.experian.aperture.streaming.client.request.RequestBase;
 
 /**
  * The request model.
  */
-public final class EnrichmentRequest {
-    /**
-     * Optional identifier that will be returned in the response. The only way to keep track of the request.
-     */
-    private String referenceId;
-
+public final class EnrichmentRequest extends RequestBase {
     /**
      * The 3-letter ISO country code.
      */
@@ -27,23 +24,13 @@ public final class EnrichmentRequest {
     private EnrichmentDatasetAttributes attributes;
 
     EnrichmentRequest(final String referenceId, final String countryIso, final EnrichmentDatasetKeys keys, final EnrichmentDatasetAttributes attributes) {
-        Contract.requiresNotEmpty(referenceId, "The reference_id field is required.");
-        Contract.requiresNotWhiteSpaces(referenceId, "The reference_id field must not be empty spaces.");
-        Contract.requiresNotEmpty(countryIso, "The country_iso field is required.");
-        Contract.requiresNotNull(keys, "The keys field is required.");
-        Contract.requiresNotNull(attributes, "The attributes field is required.");
-        this.referenceId = referenceId;
+        super(referenceId);
+        Contract.requiresNotEmpty(countryIso, ResourceReader.getErrorMessageWithKey("CountryIsoRequired"));
+        Contract.requiresNotNull(keys, ResourceReader.getErrorMessageWithKey("EnrichmentKeyFieldRequired"));
+        Contract.requiresNotNull(attributes, ResourceReader.getErrorMessageWithKey("EnrichmentAttributesFieldRequired"));
         this.countryIso = countryIso;
         this.keys = keys;
         this.attributes = attributes;
-    }
-
-    /**
-     * Gets the referenceId.
-     * @return The referenceId.
-     */
-    public String getReferenceId() {
-        return this.referenceId;
     }
 
     /**

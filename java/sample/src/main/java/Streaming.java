@@ -1,5 +1,7 @@
 import com.experian.aperture.streaming.client.*;
+import com.experian.aperture.streaming.client.options.address.AddressValidationOptions;
 import com.experian.aperture.streaming.client.request.RequestBuilder;
+import com.experian.aperture.streaming.client.request.address.AddressValidationRequest;
 import com.experian.aperture.streaming.client.request.email.EmailValidationRequest;
 import com.experian.aperture.streaming.client.request.enrichment.*;
 import com.experian.aperture.streaming.client.options.OptionsBuilder;
@@ -9,6 +11,9 @@ import com.experian.aperture.streaming.client.options.email.EmailValidationOptio
 import com.experian.aperture.streaming.client.options.enrichment.EnrichmentOptions;
 import com.experian.aperture.streaming.client.request.phone.PhoneValidationRequest;
 import com.experian.aperture.streaming.client.response.StreamingException;
+import com.experian.aperture.streaming.client.response.address.AddressValidationMetadata;
+import com.experian.aperture.streaming.client.response.address.AddressValidationResponse;
+import com.experian.aperture.streaming.client.response.address.AddressValidationResult;
 import com.experian.aperture.streaming.client.response.email.EmailValidationResponse;
 import com.experian.aperture.streaming.client.response.email.EmailValidationResult;
 import com.experian.aperture.streaming.client.response.enrichment.EnrichmentResponse;
@@ -25,6 +30,8 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.Duration;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
 
 public class Streaming {
@@ -52,7 +59,15 @@ public class Streaming {
                                                 .withEnrichmentOptions(false)
                                                 .withMatchRule(null)
                                                 .withLinkageRule("Relational")
+                                                .withTimeout(Duration.ofSeconds(3))
                                                 .build();
+
+        AddressValidationOptions addressOptions = OptionsBuilder.builder()
+                .withAddressOptions(true)
+                .withTimeout(Duration.ofSeconds(15))
+                .withIncludeComponents(true)
+                .build();
+
 
         RetryOptions retryOptions = RetryOptionsBuilder.builder()
                 .withEnableAutoReconnect(false)
@@ -63,6 +78,7 @@ public class Streaming {
                         .create(RequestManagerFactory.newInstance(endpoint, token, retryOptions))
                         .withEmailOptions(emailValidationOptions)
                         .withEnrichmentOptions(enrichmentOptions)
+                        .withAddressOptions(addressOptions)
                         .build();
 
         client.onRequestFailure().subscribe(failRequestResponse -> {
@@ -93,6 +109,7 @@ public class Streaming {
         registerEmailHandler(client);
         registerEnrichmentHandler(client);
         registerPhoneHandler(client);
+        registerAddressHandler(client);
 
         printOptions();
         String input = getInput();
@@ -115,24 +132,7 @@ public class Streaming {
                     break;
 
                 case "en" :
-                    Scanner scanner = new Scanner(System.in);
-
-                    System.out.println("Enter Dpid.");
-                    String dpid = scanner.nextLine();
-
-                    System.out.println("Enter Postcode.");
-                    String postcode = scanner.nextLine();
-
-                    System.out.println("Enter Pin.");
-                    String pin = scanner.nextLine();
-
-                    System.out.println("Enter GlobalAddressKey.");
-                    String globalAddressKey = scanner.nextLine();
-
-                    System.out.println("Enter CountryIso.");
-                    String countryIso = scanner.nextLine();
-
-                    sendEnrichmentRequest(client, dpid, postcode, pin, globalAddressKey, countryIso);
+                    sendEnrichmentRequest(client);
                     break;
 
                 case "p" :
@@ -140,6 +140,11 @@ public class Streaming {
                     String number = getInput();
                     sendPhoneRequest(client, number);
                     break;
+
+                case "a" :
+                    sendAddressRequest(client);
+                    break;
+
                 default:
                     System.out.println("Unknown option.");
             }
@@ -161,6 +166,10 @@ public class Streaming {
 
     private static void registerPhoneHandler(Client client) {
         client.onPhoneResponse(Streaming::formatOutput);
+    }
+
+    private static void registerAddressHandler(Client client) {
+        client.onAddressResponse(Streaming::formatOutput);
     }
 
     private static void sendEmailRequest(Client client, String input) {
@@ -191,26 +200,19 @@ public class Streaming {
         }
     }
 
-    private static void sendEnrichmentRequest(Client client, String dpid, String postcode, String pin, String globalAddressKey, String countryIso) {
+    private static void sendEnrichmentRequest(Client client) {
         EnrichmentDatasetKeys datasetKeys = EnrichmentDatasetKeysBuilder.builder()
-                .withDpid(dpid)
-                .withPostcode(postcode)
-                .withPin(pin)
-                .withGlobalAddressKey(globalAddressKey)
+                .withPostcode("7140")
                 .build();
 
         EnrichmentDatasetAttributes attributes = EnrichmentDatasetAttributesBuilder.builder()
-                .withAusCvHouseholdList(AusCVHousehold.ADDRESS, AusCVHousehold.ADULTS_AT_ADDRESS_CODE,
-                        AusCVHousehold.ADULTS_AT_ADDRESS_DESCRIPTION, AusCVHousehold.AFFLUENCE_CODE,
-                        AusCVHousehold.AFFLUENCE_DESCRIPTION, AusCVHousehold.SA1,
-                        AusCVHousehold.STATE, AusCVHousehold.SUBURB)
-                .withAusCvPostcodeList(AusCVPostcode.ADULTS_AT_ADDRESS_CODE, AusCVPostcode.ADULTS_AT_ADDRESS_DESCRIPTION)
-                .withAusCvPersonList(AusCVPerson.PIN, AusCVPerson.GENDER, AusCVPerson.HIN, AusCVPerson.LINKAGE_POSTCODE)
+                .withAusCvPostcodeList(AusCVPostcode.HOUSEHOLD_COMPOSITION_CODE, AusCVPostcode.HOUSEHOLD_COMPOSITION_DESCRIPTION,
+                                       AusCVPostcode.LENGTH_OF_RESIDENCE_CODE, AusCVPostcode.LENGTH_OF_RESIDENCE_DESCRIPTION)
                 .build();
 
         EnrichmentRequest request = RequestBuilder.builder()
                                     .withEnrichmentRequest("ref")
-                                    .withCountry(countryIso)
+                                    .withCountry("AUS")
                                     .withKeys(datasetKeys)
                                     .withAttributes(attributes)
                                     .build();
@@ -230,6 +232,22 @@ public class Streaming {
         try {
             client.onPhoneRequest(request);
             System.out.println(String.format("Sent request: %s", number));
+        } catch (final RateLimitException | ConnectionException ex) {
+            System.out.println(ex.getMessage());
+        }
+    }
+
+    private static void sendAddressRequest(Client client) {
+        AddressValidationRequest request = RequestBuilder.builder()
+                .withAddressValidationRequest("ref")
+                .withCountryIso("USA")
+                .withBuilding("125")
+                .withStreet("Summer St")
+                .withLocality("Boston")
+                .build();
+        try {
+            client.onAddressRequest(request);
+            System.out.println("Sent request!");
         } catch (final RateLimitException | ConnectionException ex) {
             System.out.println(ex.getMessage());
         }
@@ -282,7 +300,26 @@ public class Streaming {
         }
     }
 
+    private static void formatOutput(AddressValidationResponse response) {
+        System.out.println();
+        try {
+            AddressValidationResult result = response.getResult();
+            if (result != null) {
+                String json = gson.toJson(result);
+                System.out.println(json);
+            }
+            AddressValidationMetadata metadata = response.getMetadata();
+            if (metadata != null) {
+                String json = gson.toJson(metadata);
+                System.out.println(json);
+            }
+        } catch (StreamingException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
     private static void printOptions() {
+        System.out.println("Press a to send address validation request.");
         System.out.println("Press e to send email validation request.");
         System.out.println("Press eb to send bulk email validation request.");
         System.out.println("Press en to send enrichment request.");
@@ -302,6 +339,11 @@ public class Streaming {
             }
         }
         return "";
+    }
+
+    private static List<String> ConvertStringToList(String input) {
+        String[] inputList = input.split(",");
+        return Arrays.asList(inputList);
     }
 }
 

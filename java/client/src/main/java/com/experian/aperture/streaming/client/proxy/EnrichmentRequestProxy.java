@@ -26,6 +26,9 @@ public final class EnrichmentRequestProxy extends RequestProxyBase {
     @SerializedName("linkage_rule")
     private final String linkageRule;
 
+    @SerializedName("timeout")
+    private long timeout;
+
     public EnrichmentRequestProxy(final EnrichmentRequest request, final EnrichmentOptions options) {
         super(Versions.ENRICHMENT_REQUEST, request.getReferenceId(), options.getAddMetadata());
         this.keys = request.getKeys();
@@ -33,6 +36,7 @@ public final class EnrichmentRequestProxy extends RequestProxyBase {
         this.countryIso = request.getCountryIso();
         this.matchRule = options.getMatchRule();
         this.linkageRule = options.getLinkageRule();
+        this.timeout = options.getTimeout().getSeconds();
     }
 
     public EnrichmentDatasetKeys getKeys() {
@@ -53,5 +57,9 @@ public final class EnrichmentRequestProxy extends RequestProxyBase {
 
     public String getLinkageRule() {
         return this.linkageRule;
+    }
+
+    public long getTimeout() {
+        return this.timeout;
     }
 }

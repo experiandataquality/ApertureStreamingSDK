@@ -1,11 +1,11 @@
 package com.experian.aperture.streaming.client.list;
 
-import com.experian.aperture.streaming.client.request.RequestBuilder;
-import com.experian.aperture.streaming.client.request.email.EmailValidationRequest;
-import com.experian.aperture.streaming.client.request.phone.PhoneValidationRequest;
 import com.experian.aperture.streaming.client.options.OptionsBuilder;
 import com.experian.aperture.streaming.client.proxy.EmailValidationRequestProxy;
 import com.experian.aperture.streaming.client.proxy.PhoneValidationRequestProxy;
+import com.experian.aperture.streaming.client.request.RequestBuilder;
+import com.experian.aperture.streaming.client.request.email.EmailValidationRequest;
+import com.experian.aperture.streaming.client.request.phone.PhoneValidationRequest;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -45,6 +45,11 @@ final class RequestContextSteps {
 
     RequestContextSteps thenEnrichmentRequestListSizeShouldBe(final int expectedSize) {
         assertThat(this.requestContext.getEnrichmentRequestList().getAll().size(), is(expectedSize));
+        return this;
+    }
+
+    RequestContextSteps thenAddressRequestListSizeShouldBe(final int expectedSize) {
+        assertThat(this.requestContext.getAddressRequestList().getAll().size(), is(expectedSize));
         return this;
     }
 

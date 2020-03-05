@@ -1,5 +1,6 @@
 package com.experian.aperture.streaming.client.list;
 
+import com.experian.aperture.streaming.client.ResourceReader;
 import com.experian.aperture.streaming.client.proxy.RequestProxyBase;
 
 import java.time.Instant;
@@ -49,7 +50,7 @@ abstract class BaseRequestList<T extends RequestProxyBase> implements RequestLis
     @Override
     public void add(final T request, final String referenceId) {
         if (this.containsKey(referenceId)) {
-            throw new IllegalArgumentException(String.format("Duplicate reference Id %s.", referenceId));
+            throw new IllegalArgumentException(ResourceReader.getErrorMessageWithKeyFormat("DuplicateReferenceId", referenceId));
         }
 
         if (this.canAdd()) {

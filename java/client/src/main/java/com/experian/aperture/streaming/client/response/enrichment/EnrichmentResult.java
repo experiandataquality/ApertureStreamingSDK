@@ -1,11 +1,12 @@
 package com.experian.aperture.streaming.client.response.enrichment;
 
+import com.experian.aperture.streaming.client.response.Result;
 import com.google.gson.annotations.SerializedName;
 
 /**
  * Details about the result. Includes the enriched data.
  */
-public final class EnrichmentResult {
+public final class EnrichmentResult implements Result {
     /**
      * The ConsumerView Australia - Household data.
      **/

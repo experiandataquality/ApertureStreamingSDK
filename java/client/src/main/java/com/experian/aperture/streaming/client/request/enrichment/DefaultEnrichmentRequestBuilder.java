@@ -1,5 +1,6 @@
 package com.experian.aperture.streaming.client.request.enrichment;
 
+import com.experian.aperture.streaming.client.ResourceReader;
 import com.experian.aperture.streaming.client.guard.Contract;
 import com.experian.aperture.streaming.client.request.RequestBuilder;
 
@@ -11,10 +12,9 @@ public final class DefaultEnrichmentRequestBuilder implements RequestBuilder.Enr
     private String country;
     private EnrichmentDatasetKeys keys;
     private EnrichmentDatasetAttributes attributes;
-    private final String message = "The field reference_id must be alphanumeric.";
-    private final String referenceIdError = "The field reference_id must be less than 256 characters.";
-    private final String referenceIdRequired = "The reference_id field is required.";
-    private final String referenceIdRequiredEmptySpaces = "The reference_id field must not be empty spaces.";
+    private final String message = ResourceReader.getErrorMessageWithKey("ReferenceIdAlphanumericError");
+    private final String referenceIdError = ResourceReader.getErrorMessageWithKey("ReferenceIdLengthError");
+    private final String referenceIdRequiredEmptySpaces = ResourceReader.getErrorMessageWithKey("ReferenceIdRequiredEmptySpaceError");
 
     public DefaultEnrichmentRequestBuilder(final String referenceId) {
         Contract.requiresNotWhiteSpaces(referenceId, referenceIdRequiredEmptySpaces);
@@ -31,7 +31,7 @@ public final class DefaultEnrichmentRequestBuilder implements RequestBuilder.Enr
      */
     @Override
     public DefaultEnrichmentRequestBuilder withCountry(final String country) {
-        Contract.requiresNotEmpty(country, "The country_iso field is required.");
+        Contract.requiresNotEmpty(country, ResourceReader.getErrorMessageWithKey("CountryIsoRequired"));
         this.country = country;
         return this;
     }
@@ -44,7 +44,7 @@ public final class DefaultEnrichmentRequestBuilder implements RequestBuilder.Enr
      */
     @Override
     public DefaultEnrichmentRequestBuilder withKeys(final EnrichmentDatasetKeys keys) {
-        Contract.requiresNotNull(keys, "The keys field is required.");
+        Contract.requiresNotNull(keys, ResourceReader.getErrorMessageWithKey("EnrichmentKeyFieldRequired"));
         this.keys = keys;
         return this;
     }
@@ -57,7 +57,7 @@ public final class DefaultEnrichmentRequestBuilder implements RequestBuilder.Enr
      */
     @Override
     public DefaultEnrichmentRequestBuilder withAttributes(final EnrichmentDatasetAttributes attributes) {
-        Contract.requiresNotNull(attributes, "The attributes field is required.");
+        Contract.requiresNotNull(attributes, ResourceReader.getErrorMessageWithKey("EnrichmentAttributesFieldRequired"));
         this.attributes = attributes;
         return this;
     }

@@ -1,5 +1,6 @@
 package com.experian.aperture.streaming.client.list;
 
+import com.experian.aperture.streaming.client.proxy.AddressValidationRequestProxy;
 import com.experian.aperture.streaming.client.proxy.EmailValidationRequestProxy;
 import com.experian.aperture.streaming.client.proxy.EnrichmentRequestProxy;
 import com.experian.aperture.streaming.client.proxy.PhoneValidationRequestProxy;
@@ -12,11 +13,13 @@ public class DefaultRequestContext implements RequestContext {
     private final EmailRequestList emailRequestList;
     private final PhoneRequestList phoneRequestList;
     private final EnrichmentRequestList enrichmentRequestList;
+    private final AddressRequestList addressRequestList;
 
     public DefaultRequestContext() {
         this.emailRequestList = new EmailRequestList();
         this.phoneRequestList = new PhoneRequestList();
         this.enrichmentRequestList = new EnrichmentRequestList();
+        this.addressRequestList = new AddressRequestList();
     }
 
     @Override
@@ -35,9 +38,15 @@ public class DefaultRequestContext implements RequestContext {
     }
 
     @Override
+    public RequestList<AddressValidationRequestProxy> getAddressRequestList() {
+        return this.addressRequestList;
+    }
+
+    @Override
     public void clearAll() {
         this.emailRequestList.clear();
         this.phoneRequestList.clear();
         this.enrichmentRequestList.clear();
+        this.addressRequestList.clear();
     }
 }

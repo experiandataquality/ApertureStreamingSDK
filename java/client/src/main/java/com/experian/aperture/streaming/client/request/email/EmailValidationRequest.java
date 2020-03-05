@@ -1,16 +1,13 @@
 package com.experian.aperture.streaming.client.request.email;
 
+import com.experian.aperture.streaming.client.ResourceReader;
 import com.experian.aperture.streaming.client.guard.Contract;
+import com.experian.aperture.streaming.client.request.RequestBase;
 
 /**
  * The email validation request model.
  */
-public class EmailValidationRequest {
-    /**
-     * Identifier that will be returned in the response to help you track the request.
-     */
-    private String referenceId;
-
+public class EmailValidationRequest extends RequestBase {
     /**
      * The email address that is the subject of the validation.
      * Examples: support@experian.com
@@ -18,19 +15,9 @@ public class EmailValidationRequest {
     private String email;
 
     EmailValidationRequest(final String referenceId, final String email) throws  IllegalArgumentException {
-        Contract.requiresNotEmpty(referenceId, "The reference_id field is required.");
-        Contract.requiresNotWhiteSpaces(referenceId, "The reference_id field must not be empty spaces.");
-        Contract.requiresNotEmpty(email, "The email field is required.");
-        this.referenceId = referenceId;
+        super(referenceId);
+        Contract.requiresNotEmpty(email, ResourceReader.getErrorMessageWithKey("EmailFieldRequired"));
         this.email = email;
-    }
-
-    /**
-     * Gets the reference Id.
-     * @return The reference Id.
-     */
-    public String getReferenceId() {
-        return this.referenceId;
     }
 
     /**

@@ -24,19 +24,20 @@ public final class RequestContextTests {
      * for each email, phone and enrichment.
      */
     @Test
-    public void new_shouldInstantiateEmptyLists() {
+    public void should_CreateEmptyLists_When_NewlyInstantiated() {
         this.steps
                 .givenISetupRequestContext()
                 .thenEmailRequestListSizeShouldBe(0)
                 .thenPhoneRequestListSizeShouldBe(0)
-                .thenEnrichmentRequestListSizeShouldBe(0);
+                .thenEnrichmentRequestListSizeShouldBe(0)
+                .thenAddressRequestListSizeShouldBe(0);
     }
 
     /**
      * Assert that requests would be added to the respective list.
      */
     @Test
-    public void add_shouldAddRequestToRespectiveList() {
+    public void should_AddANewRequestToRespectiveList_When_Add() {
         this.steps
                 .givenISetupRequestContext()
                 .whenIAddNewEmailRequest("abc@gmail.com", "emailProxy1")
@@ -51,7 +52,7 @@ public final class RequestContextTests {
      * Assert that all requests would be removed.
      */
     @Test
-    public void clearAll_shouldRemoveAllRequests() {
+    public void should_RemoveAllRequests_When_ClearAll() {
         this.steps
                 .givenISetupRequestContext()
                 .whenIAddNewEmailRequest("abc@gmail.com", "emailProxy1")
@@ -60,10 +61,11 @@ public final class RequestContextTests {
                 .thenEmailRequestListSizeShouldBe(2)
                 .thenPhoneRequestListSizeShouldBe(1)
                 .thenEnrichmentRequestListSizeShouldBe(0)
+                .thenAddressRequestListSizeShouldBe(0)
                 .whenIClearAll()
                 .thenEmailRequestListSizeShouldBe(0)
                 .thenPhoneRequestListSizeShouldBe(0)
-                .thenEnrichmentRequestListSizeShouldBe(0);
+                .thenEnrichmentRequestListSizeShouldBe(0)
+                .thenAddressRequestListSizeShouldBe(0);
     }
 }
-

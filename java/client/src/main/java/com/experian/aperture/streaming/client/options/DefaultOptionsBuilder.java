@@ -1,5 +1,6 @@
 package com.experian.aperture.streaming.client.options;
 
+import com.experian.aperture.streaming.client.options.address.DefaultAddressValidationOptionsBuilder;
 import com.experian.aperture.streaming.client.options.email.DefaultEmailValidationOptionsBuilder;
 import com.experian.aperture.streaming.client.options.enrichment.DefaultEnrichmentOptionsBuilder;
 import com.experian.aperture.streaming.client.options.phone.DefaultPhoneValidationOptionsBuilder;
@@ -21,5 +22,10 @@ public final class DefaultOptionsBuilder implements OptionsBuilder {
     @Override
     public EnrichmentOptionsBuilder withEnrichmentOptions(final boolean addMetadata) {
         return new DefaultEnrichmentOptionsBuilder(addMetadata);
+    }
+
+    @Override
+    public AddressValidationOptionsBuilder withAddressOptions(final boolean addMetadata) {
+        return new DefaultAddressValidationOptionsBuilder(addMetadata);
     }
 }

@@ -72,7 +72,7 @@ public final class RequestManagerTests {
     @Test
     public void should_ThrowExceptionWhenDuplicateReferenceIdIsInsertedOnEmailRequest() throws RateLimitException, ConnectionException {
         this.exception.expect(IllegalArgumentException.class);
-        this.exception.expectMessage("Duplicate reference Id test.");
+        this.exception.expectMessage("Duplicate referenceId test.");
         this.steps
                 .givenISetupRequestManager()
                 .whenISetupEmail(true, true)
@@ -106,7 +106,7 @@ public final class RequestManagerTests {
     @Test
     public void should_ThrowExceptionWhenDuplicateReferenceIdIsInsertedOnPhoneRequest() throws RateLimitException, ConnectionException {
         this.exception.expect(IllegalArgumentException.class);
-        this.exception.expectMessage("Duplicate reference Id test.");
+        this.exception.expectMessage("Duplicate referenceId test.");
         this.steps
                 .givenISetupRequestManager()
                 .whenISetupPhone(true, true)
@@ -155,7 +155,7 @@ public final class RequestManagerTests {
     @Test
     public void should_ThrowExceptionWhenDuplicateReferenceIdIsInsertedOnEnrichmentRequest() throws RateLimitException, ConnectionException {
         this.exception.expect(IllegalArgumentException.class);
-        this.exception.expectMessage("Duplicate reference Id test.");
+        this.exception.expectMessage("Duplicate referenceId test.");
         this.steps
                 .givenISetupRequestManager()
                 .whenISetupEnrichment(true, true)
@@ -192,6 +192,55 @@ public final class RequestManagerTests {
                 .whenISetupEnrichment(false, true)
                 .whenISendEnrichmentRequest()
                 .thenIShouldGetEnrichmentRequest(1, 3, 1);
+    }
+
+    /**
+     * Assert that client able to send address request.
+     *
+     * @throws RateLimitException Throws the RateLimitException.
+     * @throws ConnectionException Throws the ConnectionException.
+     */
+    @Test
+    public void should_BeAbleToGetRequestOnAddressRequest() throws RateLimitException, ConnectionException {
+        this.steps
+                .givenISetupRequestManager()
+                .whenISetupAddress(false, true)
+                .whenISendAddressRequest()
+                .thenIShouldGetAddressRequest(1, 3, 1);
+    }
+
+    /**
+     * Assert that client able to send address request with the same reference Id.
+     *
+     * @throws RateLimitException Throws the RateLimitException.
+     * @throws ConnectionException Throws the ConnectionException.
+     */
+    @Test
+    public void should_ThrowExceptionWhenDuplicateReferenceIdIsInsertedOnAddressRequest() throws RateLimitException, ConnectionException {
+        this.exception.expect(IllegalArgumentException.class);
+        this.exception.expectMessage("Duplicate referenceId test.");
+        this.steps
+                .givenISetupRequestManager()
+                .whenISetupAddress(true, true)
+                .whenISendAddressRequest()
+                .thenIShouldGetAddressRequest(0, 0, 0);
+    }
+
+    /**
+     * Assert that client able to send address request once hit the rate limit.
+     *
+     * @throws RateLimitException Throws the RateLimitException.
+     * @throws ConnectionException Throws the ConnectionException.
+     */
+    @Test
+    public void should_ThrowExceptionWhenRateLimitIsHitOnAddressRequest() throws RateLimitException, ConnectionException {
+        this.exception.expect(RateLimitException.class);
+        this.exception.expectMessage("429 (Too Many Request) Your account has been blocked for one minute as the rate at which you are submitting requests is too high. Wait one minute and reduce the rate you are submitting requests.");
+        this.steps
+                .givenISetupRequestManager()
+                .whenISetupAddress(false, false)
+                .whenISendAddressRequest()
+                .thenIShouldGetAddressRequest(0, 0, 0);
     }
 
     /**

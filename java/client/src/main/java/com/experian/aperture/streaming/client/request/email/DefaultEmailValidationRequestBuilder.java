@@ -1,5 +1,6 @@
 package com.experian.aperture.streaming.client.request.email;
 
+import com.experian.aperture.streaming.client.ResourceReader;
 import com.experian.aperture.streaming.client.guard.Contract;
 import com.experian.aperture.streaming.client.request.RequestBuilder;
 /**
@@ -8,10 +9,9 @@ import com.experian.aperture.streaming.client.request.RequestBuilder;
 public final class DefaultEmailValidationRequestBuilder implements RequestBuilder.EmailValidationRequestBuilder {
     private String email;
     private String referenceId;
-    private final String message = "The field reference_id must be alphanumeric.";
-    private final String referenceIdError = "The field reference_id must be less than 256 characters.";
-    private final String referenceIdRequired = "The reference_id field is required.";
-    private final String referenceIdRequiredEmptySpaces = "The reference_id field must not be empty spaces.";
+    private final String message = ResourceReader.getErrorMessageWithKey("ReferenceIdAlphanumericError");
+    private final String referenceIdError = ResourceReader.getErrorMessageWithKey("ReferenceIdLengthError");
+    private final String referenceIdRequiredEmptySpaces = ResourceReader.getErrorMessageWithKey("ReferenceIdRequiredEmptySpaceError");
 
     public DefaultEmailValidationRequestBuilder(final String referenceId) {
         Contract.requiresNotWhiteSpaces(referenceId, referenceIdRequiredEmptySpaces);
@@ -22,7 +22,7 @@ public final class DefaultEmailValidationRequestBuilder implements RequestBuilde
 
     @Override
     public RequestBuilder.EmailValidationRequestBuilder withEmail(final String email) {
-        Contract.requiresNotEmpty(email, "The email field is required.");
+        Contract.requiresNotEmpty(email, ResourceReader.getErrorMessageWithKey("EmailFieldRequired"));
         this.email = email;
         return this;
     }

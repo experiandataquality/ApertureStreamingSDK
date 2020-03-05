@@ -4,12 +4,10 @@ import com.experian.aperture.streaming.client.handler.ConnectionFailureHandler;
 import com.experian.aperture.streaming.client.handler.ResponseManager;
 import com.experian.aperture.streaming.client.list.RequestContext;
 import com.experian.aperture.streaming.client.list.RequestList;
-import com.experian.aperture.streaming.client.proxy.EmailValidationRequestProxy;
-import com.experian.aperture.streaming.client.proxy.EnrichmentRequestProxy;
-import com.experian.aperture.streaming.client.proxy.PhoneValidationRequestProxy;
-import com.experian.aperture.streaming.client.proxy.RequestProxyBase;
+import com.experian.aperture.streaming.client.proxy.*;
 import com.experian.aperture.streaming.client.response.ConnectionFailResponse;
 import com.experian.aperture.streaming.client.response.FailRequestResponse;
+import com.experian.aperture.streaming.client.response.address.AddressValidationResponse;
 import com.experian.aperture.streaming.client.response.email.EmailValidationResponse;
 import com.experian.aperture.streaming.client.response.enrichment.EnrichmentResponse;
 import com.experian.aperture.streaming.client.response.phone.PhoneValidationResponse;
@@ -66,7 +64,7 @@ public class DefaultRequestManager implements RequestManager {
         this.requestContext.getPhoneRequestList().add(proxy, proxy.getReferenceId());
         this.connection
                 .send(StreamingMethod.PHONE_REQUEST.getValue(), proxy)
-                .subscribe(((aVoid, throwable) -> this.responseManager.handleError(StreamingMethod.EMAIL_REQUEST, proxy.getReferenceId(), throwable.getMessage())));
+                .subscribe(((aVoid, throwable) -> this.responseManager.handleError(StreamingMethod.PHONE_REQUEST, proxy.getReferenceId(), throwable.getMessage())));
     }
 
     @Override
@@ -76,7 +74,18 @@ public class DefaultRequestManager implements RequestManager {
         this.requestContext.getEnrichmentRequestList().add(proxy, proxy.getReferenceId());
         this.connection
                 .send(StreamingMethod.ENRICHMENT_REQUEST.getValue(), proxy)
-                .subscribe(((aVoid, throwable) -> this.responseManager.handleError(StreamingMethod.EMAIL_REQUEST, proxy.getReferenceId(), throwable.getMessage())));
+                .subscribe(((aVoid, throwable) -> this.responseManager.handleError(StreamingMethod.ENRICHMENT_REQUEST, proxy.getReferenceId(), throwable.getMessage())));
+    }
+
+    @Override
+    public void onAddressRequest(final AddressValidationRequestProxy proxy) throws RateLimitException, ConnectionException {
+        checkReferenceId(proxy.getReferenceId(), this.requestContext.getAddressRequestList());
+        checkRateLimit(this.requestContext.getAddressRequestList(), proxy);
+        this.requestContext.getAddressRequestList().add(proxy, proxy.getReferenceId());
+        this.connection
+                .send(StreamingMethod.ADDRESS_REQUEST.getValue(), proxy)
+                .subscribe((((aVoid, throwable) -> this.responseManager.handleError(StreamingMethod.ADDRESS_REQUEST, proxy.getReferenceId(), throwable.getMessage()))));
+
     }
 
     @Override
@@ -95,6 +104,11 @@ public class DefaultRequestManager implements RequestManager {
     }
 
     @Override
+    public void onAddressResponse(final ConnectionResponse<AddressValidationResponse> responseHandler) {
+        this.connection.subscribe(StreamingMethod.ADDRESS_RESPONSE.getValue(), responseHandler, AddressValidationResponse.class);
+    }
+
+    @Override
     public PublishSubject<FailRequestResponse> onRequestFailure() {
         return this.responseManager.getFailRequestSubject();
     }
@@ -106,7 +120,7 @@ public class DefaultRequestManager implements RequestManager {
 
     private <T extends RequestProxyBase> void checkReferenceId(final String referenceId, RequestList<T> requestList) {
         if (requestList.containsKey(referenceId)) {
-            throw new IllegalArgumentException(String.format("Duplicate reference Id %s.", referenceId));
+            throw new IllegalArgumentException(ResourceReader.getErrorMessageWithKeyFormat("DuplicateReferenceId", referenceId));
         }
     }
 
@@ -120,6 +134,7 @@ public class DefaultRequestManager implements RequestManager {
         this.connectionFailureHandler.handle(connectionEvent,
                 this.requestContext.getEmailRequestList().getAllReferenceIds(),
                 this.requestContext.getPhoneRequestList().getAllReferenceIds(),
-                this.requestContext.getEnrichmentRequestList().getAllReferenceIds());
+                this.requestContext.getEnrichmentRequestList().getAllReferenceIds(),
+                this.requestContext.getAddressRequestList().getAllReferenceIds());
     }
 }

@@ -1,5 +1,6 @@
 package com.experian.aperture.streaming.client.options.email;
 
+import com.experian.aperture.streaming.client.ResourceReader;
 import com.experian.aperture.streaming.client.guard.Contract;
 import com.experian.aperture.streaming.client.options.OptionsBuilder;
 
@@ -9,7 +10,7 @@ import java.time.Duration;
  * Defines the default EmailValidation options builder.
  */
 public final class DefaultEmailValidationOptionsBuilder implements OptionsBuilder.EmailValidationOptionsBuilder {
-    private final String message = "The field timeout must be between 3 and 15.";
+    private final String message = ResourceReader.getErrorMessageWithKey("EmailTimeoutFieldRange");
     private final Duration defaultTimeout = Duration.ofSeconds(3);
     private final boolean defaultAddMetadata = true;
     private Duration timeout = defaultTimeout;

@@ -55,7 +55,7 @@ public class RequestBuilderTests {
         final String referenceId = null;
         final String email = "abc@abc.com";
         exception.expect(IllegalArgumentException.class);
-        exception.expectMessage("The reference_id field must not be empty spaces.");
+        exception.expectMessage("The referenceId field must not be empty spaces.");
         this.steps
                 .givenISetupRequestBuilder()
                 .whenIBuildEmailValidationRequest(referenceId, email)
@@ -70,7 +70,7 @@ public class RequestBuilderTests {
         final String referenceId = "";
         final String email = "abc@abc.com";
         exception.expect(IllegalArgumentException.class);
-        exception.expectMessage("The reference_id field must not be empty spaces.");
+        exception.expectMessage("The referenceId field must not be empty spaces.");
         this.steps
                 .givenISetupRequestBuilder()
                 .whenIBuildEmailValidationRequest(referenceId, email)
@@ -130,7 +130,7 @@ public class RequestBuilderTests {
         final String outputFormat = "E164";
         final int cacheValueDays = 5;
         exception.expect(IllegalArgumentException.class);
-        exception.expectMessage("The reference_id field must not be empty spaces.");
+        exception.expectMessage("The referenceId field must not be empty spaces.");
         this.steps
                 .givenISetupRequestBuilder()
                 .whenIBuildPhoneValidationRequest(referenceId, randomNumber, outputFormat, cacheValueDays)
@@ -146,7 +146,7 @@ public class RequestBuilderTests {
         final String outputFormat = "E164";
         final int cacheValueDays = 5;
         exception.expect(IllegalArgumentException.class);
-        exception.expectMessage("The reference_id field must not be empty spaces.");
+        exception.expectMessage("The referenceId field must not be empty spaces.");
         this.steps
                 .givenISetupRequestBuilder()
                 .whenIBuildPhoneValidationRequest(referenceId, randomNumber, outputFormat, cacheValueDays)
@@ -255,7 +255,7 @@ public class RequestBuilderTests {
         dto.setDpid(randomString);
         final List<Geocode> geocodeList = Arrays.asList(Geocode.LATITUDE, Geocode.LONGITUDE);
         exception.expect(IllegalArgumentException.class);
-        exception.expectMessage("The reference_id field must not be empty spaces.");
+        exception.expectMessage("The referenceId field must not be empty spaces.");
         this.steps
                 .givenISetupRequestBuilder()
                 .whenIBuildEnrichmentDatasetKeys(dto)
@@ -274,7 +274,7 @@ public class RequestBuilderTests {
         dto.setDpid(randomString);
         final List<Geocode> geocodeList = Arrays.asList(Geocode.LATITUDE, Geocode.LONGITUDE);
         exception.expect(IllegalArgumentException.class);
-        exception.expectMessage("The reference_id field must not be empty spaces.");
+        exception.expectMessage("The referenceId field must not be empty spaces.");
         this.steps
                 .givenISetupRequestBuilder()
                 .whenIBuildEnrichmentDatasetKeys(dto)
@@ -294,7 +294,7 @@ public class RequestBuilderTests {
         dto.setDpid(randomString);
         final List<Geocode> geocodeList = Arrays.asList(Geocode.LATITUDE, Geocode.LONGITUDE);
         exception.expect(IllegalArgumentException.class);
-        exception.expectMessage("The country_iso field is required.");
+        exception.expectMessage("The countryIso field is required.");
         this.steps
                 .givenISetupRequestBuilder()
                 .whenIBuildEnrichmentDatasetKeys(dto)
@@ -314,7 +314,7 @@ public class RequestBuilderTests {
         dto.setDpid(randomString);
         final List<Geocode> geocodeList = Arrays.asList(Geocode.LATITUDE, Geocode.LONGITUDE);
         exception.expect(IllegalArgumentException.class);
-        exception.expectMessage("The country_iso field is required.");
+        exception.expectMessage("The countryIso field is required.");
         this.steps
                 .givenISetupRequestBuilder()
                 .whenIBuildEnrichmentDatasetKeys(dto)

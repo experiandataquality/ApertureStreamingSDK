@@ -1,5 +1,6 @@
 package com.experian.aperture.streaming.client.list;
 
+import com.experian.aperture.streaming.client.proxy.AddressValidationRequestProxy;
 import com.experian.aperture.streaming.client.proxy.EmailValidationRequestProxy;
 import com.experian.aperture.streaming.client.proxy.EnrichmentRequestProxy;
 import com.experian.aperture.streaming.client.proxy.PhoneValidationRequestProxy;
@@ -25,6 +26,12 @@ public interface RequestContext {
      * @return The enrichment request list.
      */
     RequestList<EnrichmentRequestProxy> getEnrichmentRequestList();
+
+    /**
+     * Gets the address request list.
+     * @return The address request list.
+     */
+    RequestList<AddressValidationRequestProxy> getAddressRequestList();
 
     /**
      * Clears all requests.

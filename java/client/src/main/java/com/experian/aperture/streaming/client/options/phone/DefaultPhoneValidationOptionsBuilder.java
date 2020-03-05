@@ -1,5 +1,6 @@
 package com.experian.aperture.streaming.client.options.phone;
 
+import com.experian.aperture.streaming.client.ResourceReader;
 import com.experian.aperture.streaming.client.guard.Contract;
 import com.experian.aperture.streaming.client.options.OptionsBuilder;
 
@@ -9,7 +10,7 @@ import java.time.Duration;
  * Defines the default PhoneValidation options builder.
  */
 public final class DefaultPhoneValidationOptionsBuilder implements OptionsBuilder.PhoneValidationOptionsBuilder {
-    private final String message = "The field timeout must be between 2 and 15.";
+    private final String message = ResourceReader.getErrorMessageWithKey("PhoneTimeoutFieldRange");
     private final boolean defaultAddMetadata = true;
     private final String defaultOutputFormat = "E164";
     private final int defaultCacheValueDays = 7;

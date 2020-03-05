@@ -1,7 +1,9 @@
 package com.experian.aperture.streaming.client.list;
 
+import com.experian.aperture.streaming.client.proxy.AddressValidationRequestProxy;
 import com.experian.aperture.streaming.client.RandomGenerator;
 import com.experian.aperture.streaming.client.request.RequestBuilder;
+import com.experian.aperture.streaming.client.request.address.AddressValidationRequest;
 import com.experian.aperture.streaming.client.request.email.EmailValidationRequest;
 import com.experian.aperture.streaming.client.request.enrichment.*;
 import com.experian.aperture.streaming.client.request.phone.PhoneValidationRequest;
@@ -35,8 +37,18 @@ final class RequestListSteps {
         return this;
     }
 
+    RequestListSteps givenISetupAddressRequestList() {
+        this.requestList = new AddressRequestList();
+        return this;
+    }
+
     RequestListSteps whenIAddNewEmailRequest(final String input, final String referenceId) {
         this.requestList.add(createEmailProxy(input, referenceId), referenceId);
+        return this;
+    }
+
+    RequestListSteps whenIAddNewAddressRequest(final String input, final String referenceId) {
+        this.requestList.add(createAddressProxy(input, referenceId), referenceId);
         return this;
     }
 
@@ -97,6 +109,11 @@ final class RequestListSteps {
 
     RequestListSteps thenTheAddedRequestCountryAtTheSpecifiedIndexShouldBe(final int index, final String input) {
         assertThat(((EnrichmentRequestList) this.requestList).getAll().get(index).getCountryIso(), is(input));
+        return this;
+    }
+
+    RequestListSteps thenTheAddedRequestCountryIsoAtTheSpecifiedIndexShouldBe(final int index, final String input) {
+        assertThat(((AddressRequestList) this.requestList).getAll().get(index).getCountryIso(), is(input));
         return this;
     }
 
@@ -179,5 +196,18 @@ final class RequestListSteps {
                 .withKeys(datasetKeys)
                 .withAttributes(attributes)
                 .build();
+    }
+
+    private AddressValidationRequestProxy createAddressProxy(final String input, final String referenceId) {
+        final AddressValidationRequestProxy proxy = new AddressValidationRequestProxy(createAddressRequest(input, referenceId),  OptionsBuilder.builder().withAddressOptions(false).getDefault());
+        return proxy;
+    }
+
+    private AddressValidationRequest createAddressRequest(final String input, final String referenceId) {
+        final AddressValidationRequest request = RequestBuilder.builder()
+                .withAddressValidationRequest(referenceId)
+                .withCountryIso(input)
+                .build();
+        return request;
     }
 }

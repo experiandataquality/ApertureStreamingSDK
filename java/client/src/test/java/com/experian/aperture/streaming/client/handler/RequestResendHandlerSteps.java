@@ -2,10 +2,7 @@ package com.experian.aperture.streaming.client.handler;
 
 import com.experian.aperture.streaming.client.Connection;
 import com.experian.aperture.streaming.client.ConnectionException;
-import com.experian.aperture.streaming.client.list.EmailRequestList;
-import com.experian.aperture.streaming.client.list.EnrichmentRequestList;
-import com.experian.aperture.streaming.client.list.PhoneRequestList;
-import com.experian.aperture.streaming.client.list.RequestContext;
+import com.experian.aperture.streaming.client.list.*;
 import io.reactivex.Single;
 import org.mockito.Mockito;
 
@@ -50,6 +47,16 @@ public class RequestResendHandlerSteps {
      * */
     public RequestResendHandlerSteps givenISetupRequestContextWithEnrichmentRequestList(final EnrichmentRequestList enrichmentRequestList) {
         Mockito.when(requestContext.getEnrichmentRequestList()).thenReturn(enrichmentRequestList);
+        return this;
+    }
+
+    /**
+     * To set up request context to return AddressRequestList.
+     * @param addressRequestList The address request list.
+     * @return The request resend handler steps.
+     * */
+    public RequestResendHandlerSteps givenISetupRequestContextWithAddressRequestList(final AddressRequestList addressRequestList) {
+        Mockito.when(requestContext.getAddressRequestList()).thenReturn(addressRequestList);
         return this;
     }
 
@@ -103,6 +110,17 @@ public class RequestResendHandlerSteps {
      * */
     public RequestResendHandlerSteps thenEnrichRequestIsSend(final int times) throws ConnectionException {
         Mockito.verify(this.connection, times(times)).send(eq("Enrich"), Mockito.any(Object.class));
+        return this;
+    }
+
+    /**
+     * To validate the times of enrichment requests are sent.
+     * @param times The number of times that the requests are sent.
+     * @return The request resend handler steps.
+     * @throws ConnectionException The ConnectionException.
+     * */
+    public RequestResendHandlerSteps thenAddressRequestIsSend(final int times) throws ConnectionException {
+        Mockito.verify(this.connection, times(times)).send(eq("ValidateAddress"), Mockito.any(Object.class));
         return this;
     }
 }

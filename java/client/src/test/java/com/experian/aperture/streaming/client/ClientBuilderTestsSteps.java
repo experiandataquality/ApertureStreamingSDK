@@ -1,5 +1,7 @@
 package com.experian.aperture.streaming.client;
 
+import com.experian.aperture.streaming.client.proxy.AddressValidationRequestProxy;
+import com.experian.aperture.streaming.client.request.address.AddressValidationRequest;
 import com.experian.aperture.streaming.client.request.email.EmailValidationRequest;
 import com.experian.aperture.streaming.client.request.enrichment.*;
 import com.experian.aperture.streaming.client.request.phone.PhoneValidationRequest;
@@ -86,6 +88,18 @@ final class ClientBuilderTestsSteps {
     }
 
     /**
+     * Create the on address request.
+     * @param addressRequest The enrichment request.
+     * @throws RateLimitException Throws the RateLimitException.
+     * @throws ConnectionException Throws the ConnectionException.
+     * @return client
+     */
+    ClientBuilderTestsSteps whenISendAddressRequest(final AddressValidationRequest addressRequest) throws RateLimitException, ConnectionException {
+        client.onAddressRequest(addressRequest);
+        return this;
+    }
+
+    /**
      * Create the on email response.
      *
      * @return client
@@ -116,6 +130,16 @@ final class ClientBuilderTestsSteps {
     }
 
     /**
+     * Create the on address response.
+     *
+     * @return client
+     */
+    ClientBuilderTestsSteps whenISendAddressResponse() {
+        client.onAddressResponse(Mockito.any());
+        return this;
+    }
+
+    /**
      * Assert the phone response.
      *
      * @return client
@@ -142,6 +166,16 @@ final class ClientBuilderTestsSteps {
      */
     ClientBuilderTestsSteps thenIShouldGetEmailResponse() {
         verify(requestManager, times(1)).onEmailResponse(Mockito.any());
+        return this;
+    }
+
+    /**
+     * Assert the address response.
+     *
+     * @return client
+     */
+    ClientBuilderTestsSteps thenIShouldGetAddressResponse() {
+        verify(requestManager, times(1)).onAddressResponse(Mockito.any());
         return this;
     }
 
@@ -178,6 +212,11 @@ final class ClientBuilderTestsSteps {
      */
     ClientBuilderTestsSteps thenIShouldGetEmailRequest() throws RateLimitException, ConnectionException {
         verify(requestManager, times(1)).onEmailRequest(Mockito.any(EmailValidationRequestProxy.class));
+        return this;
+    }
+
+    ClientBuilderTestsSteps thenIShouldGetAddressRequest() throws RateLimitException, ConnectionException {
+        verify(requestManager, times(1)).onAddressRequest(Mockito.any(AddressValidationRequestProxy.class));
         return this;
     }
 

@@ -1,6 +1,7 @@
 package com.experian.aperture.streaming.client.response;
 
 import com.experian.aperture.streaming.client.ErrorCode;
+import com.experian.aperture.streaming.client.ResourceReader;
 import com.experian.aperture.streaming.client.StreamingMethod;
 
 import java.util.ArrayList;
@@ -10,9 +11,9 @@ import java.util.List;
  * Defines the fail request response factory methods.
  */
 public final class FailRequestResponseFactory {
-    private static final String rateLimitErrorCode = "429 (Too Many Request)";
-    private static final String entitlementFailedErrorCode = "401 (Unauthorized)";
-    private static final String memoryErrorCode = "503 (Service Unavailable)";
+    private static final String rateLimitErrorCode = ResourceReader.getErrorMessageWithKey("RateLimitErrorCode");
+    private static final String entitlementFailedErrorCode = ResourceReader.getErrorMessageWithKey("EntitlementFailedErrorCode");
+    private static final String memoryErrorCode = ResourceReader.getErrorMessageWithKey("MemoryErrorCode");
 
     private FailRequestResponseFactory() { }
 

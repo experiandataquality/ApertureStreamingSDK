@@ -1,16 +1,13 @@
 package com.experian.aperture.streaming.client.options.email;
 
+import com.experian.aperture.streaming.client.options.OptionsBase;
+
 import java.time.Duration;
 
 /**
  * The email validation options.
  */
-public final class EmailValidationOptions {
-    /**
-     * Specifies the timeout waiting for validation response.
-     * Duration should be between 3 seconds to 15 seconds.
-     */
-    private Duration timeout;
+public final class EmailValidationOptions extends OptionsBase {
 
     /**
      * Specifies to return additional metadata in response.
@@ -18,17 +15,8 @@ public final class EmailValidationOptions {
     private boolean addMetadata;
 
     EmailValidationOptions(final boolean addMetadata, final Duration timeout) {
+        super(timeout);
         this.addMetadata = addMetadata;
-        this.timeout = timeout;
-    }
-
-    /**
-     * Gets the timeout to specify the waiting time for validation
-     * response.
-     * @return The timeout in seconds.
-     */
-    public Duration getTimeout() {
-        return this.timeout;
     }
 
     /**

@@ -4,10 +4,7 @@ import com.experian.aperture.streaming.client.Connection;
 import com.experian.aperture.streaming.client.ConnectionException;
 import com.experian.aperture.streaming.client.StreamingMethod;
 import com.experian.aperture.streaming.client.list.RequestContext;
-import com.experian.aperture.streaming.client.proxy.EmailValidationRequestProxy;
-import com.experian.aperture.streaming.client.proxy.EnrichmentRequestProxy;
-import com.experian.aperture.streaming.client.proxy.PhoneValidationRequestProxy;
-import com.experian.aperture.streaming.client.proxy.RequestProxyBase;
+import com.experian.aperture.streaming.client.proxy.*;
 
 import java.util.List;
 
@@ -31,6 +28,7 @@ public final class RequestResendHandler implements Runnable {
             sendEmailRequests(this.requestContext.getEmailRequestList().getAll());
             sendPhoneRequests(this.requestContext.getPhoneRequestList().getAll());
             sendEnrichmentRequests(this.requestContext.getEnrichmentRequestList().getAll());
+            sendAddressRequests(this.requestContext.getAddressRequestList().getAll());
         } catch (final ConnectionException ex) {
             return;
         }
@@ -51,6 +49,12 @@ public final class RequestResendHandler implements Runnable {
     private void sendEnrichmentRequests(final List<EnrichmentRequestProxy> proxies) throws ConnectionException {
         for (EnrichmentRequestProxy proxy : proxies) {
             send(StreamingMethod.ENRICHMENT_REQUEST, proxy);
+        }
+    }
+
+    private void sendAddressRequests(final List<AddressValidationRequestProxy> proxies) throws ConnectionException {
+        for (AddressValidationRequestProxy proxy : proxies) {
+            send(StreamingMethod.ADDRESS_REQUEST, proxy);
         }
     }
 

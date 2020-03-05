@@ -19,7 +19,7 @@ public class EmailValidationOptionsBuilderTests {
     @Test
     public void shouldGetTimeoutErrorResponseForEmail() {
         this.exception.expect(IllegalArgumentException.class);
-        this.exception.expectMessage("The field timeout must be between 3 and 15.");
+        this.exception.expectMessage("The timeout field must be between 3 and 15.");
         steps
              .givenIHaveOptions()
              .whenISetTimeout(1);
@@ -31,7 +31,7 @@ public class EmailValidationOptionsBuilderTests {
     @Test
     public void shouldGetTimeoutErrorResponseForEmailWhenTimeoutIsAboveMaximum() {
         this.exception.expect(IllegalArgumentException.class);
-        this.exception.expectMessage("The field timeout must be between 3 and 15.");
+        this.exception.expectMessage("The timeout field must be between 3 and 15.");
         steps
                 .givenIHaveOptions()
                 .whenISetTimeout(16);

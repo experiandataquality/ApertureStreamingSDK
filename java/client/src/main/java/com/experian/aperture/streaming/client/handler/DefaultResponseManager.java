@@ -4,6 +4,7 @@ import com.experian.aperture.streaming.client.Connection;
 import com.experian.aperture.streaming.client.StreamingMethod;
 import com.experian.aperture.streaming.client.list.RequestContext;
 import com.experian.aperture.streaming.client.response.FailRequestResponse;
+import com.experian.aperture.streaming.client.response.address.AddressValidationResponse;
 import com.experian.aperture.streaming.client.response.email.EmailValidationResponse;
 import com.experian.aperture.streaming.client.response.enrichment.EnrichmentResponse;
 import com.experian.aperture.streaming.client.response.phone.PhoneValidationResponse;
@@ -34,6 +35,9 @@ final class DefaultResponseManager implements ResponseManager {
         this.connection.subscribe(StreamingMethod.ENRICHMENT_RESPONSE.getValue(),
                 new EnrichmentResponseHandler(this.requestContext.getEnrichmentRequestList()),
                 EnrichmentResponse.class);
+        this.connection.subscribe(StreamingMethod.ADDRESS_RESPONSE.getValue(),
+                new AddressResponseHandler(this.requestContext.getAddressRequestList()),
+                AddressValidationResponse.class);
     }
 
     @Override

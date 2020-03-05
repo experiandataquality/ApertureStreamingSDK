@@ -7,7 +7,7 @@ import java.util.HashMap;
 /**
  * Defines the phone request list methods.
  */
-public class PhoneRequestList extends BaseRequestList<PhoneValidationRequestProxy> {
+public final class PhoneRequestList extends BaseRequestList<PhoneValidationRequestProxy> {
     private HashMap<String, PhoneValidationRequestProxy> requests = new HashMap<>();
 
     @Override

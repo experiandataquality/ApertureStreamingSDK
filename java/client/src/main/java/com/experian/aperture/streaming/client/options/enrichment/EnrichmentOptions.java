@@ -1,9 +1,13 @@
 package com.experian.aperture.streaming.client.options.enrichment;
 
+import com.experian.aperture.streaming.client.options.OptionsBase;
+
+import java.time.Duration;
+
 /**
  * The enrichment validation options.
  */
-public final class EnrichmentOptions {
+public final class EnrichmentOptions extends OptionsBase {
     /**
      * Ignore, currently only "Strict" is supported.
      */
@@ -19,7 +23,8 @@ public final class EnrichmentOptions {
      */
     private boolean addMetadata;
 
-    EnrichmentOptions(final boolean addMetadata, final String matchRule, final String linkageRule) {
+    EnrichmentOptions(final boolean addMetadata, final String matchRule, final String linkageRule, final Duration timeout) {
+        super(timeout);
         this.addMetadata = addMetadata;
         this.matchRule = matchRule;
         this.linkageRule = linkageRule;

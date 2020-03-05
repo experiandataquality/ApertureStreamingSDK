@@ -111,6 +111,21 @@ public final class PhoneValidationAdditionalPhoneInfo {
     @SerializedName("date_cached")
     private String dateCached;
 
+    /**
+     * An email address where the telephone network has previously stated email can be sent and the
+     * telephone network will convert the email to an SMS message and deliver this to the handset.
+     */
+    @SerializedName("email_to_sms_address")
+    private String emailToSmsAddress;
+
+    /**
+     * An email address where the telephone network has previously stated an email containing a picture
+     * can be sent and the telephone network will convert the email to an MMS message and
+     * deliver this to the handset.
+     */
+    @SerializedName("email_to_mms_address")
+    private String emailToMmsAddress;
+
     public String getOriginalOperatorName() {
         return this.originalOperatorName;
     }
@@ -229,5 +244,21 @@ public final class PhoneValidationAdditionalPhoneInfo {
 
     public void setDateCached(final String dateCached) {
         this.dateCached = dateCached;
+    }
+
+    public String getEmailToSmsAddress() {
+        return this.emailToSmsAddress;
+    }
+
+    public void setEmailToSmsAddress(final String emailToSmsAddress) {
+        this.emailToSmsAddress = emailToSmsAddress;
+    }
+
+    public String getEmailToMmsAddress() {
+        return this.emailToMmsAddress;
+    }
+
+    public void setEmailToMmsAddress(final String emailToMmsAddress) {
+        this.emailToMmsAddress = emailToMmsAddress;
     }
 }

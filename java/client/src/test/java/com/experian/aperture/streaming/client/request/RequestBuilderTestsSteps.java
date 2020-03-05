@@ -1,5 +1,6 @@
 package com.experian.aperture.streaming.client.request;
 
+import com.experian.aperture.streaming.client.request.address.AddressValidationRequest;
 import com.experian.aperture.streaming.client.request.email.EmailValidationRequest;
 import com.experian.aperture.streaming.client.request.enrichment.*;
 import com.experian.aperture.streaming.client.request.phone.PhoneValidationRequest;
@@ -17,6 +18,7 @@ final class RequestBuilderTestsSteps {
     private EmailValidationRequest emailValidationRequest;
     private PhoneValidationRequest phoneValidationRequest;
     private EnrichmentRequest enrichmentRequest;
+    private AddressValidationRequest addressValidationRequest;
     private EnrichmentDatasetKeys keys;
     private EnrichmentDatasetAttributes attributes;
 
@@ -118,6 +120,27 @@ final class RequestBuilderTestsSteps {
     }
 
     /**
+     * Builds an address validation request with the specified reference Id and input.
+     * @param dto The address validation DTO.
+     * @return The steps.
+     */
+    RequestBuilderTestsSteps whenIBuildAddressValidationRequest(final AddressValidationDto dto) {
+        this.addressValidationRequest = requestBuilder
+                .withAddressValidationRequest(dto.getReferenceId())
+                .withCountryIso(dto.getCountryIso())
+                .withDataset(dto.getDataset())
+                .withDeliveryService(dto.getDeliveryServices().toArray(new String[dto.getDeliveryServices().size()]))
+                .withOrganization(dto.getOrganizations().toArray(new String[dto.getOrganizations().size()]))
+                .withSubBuilding(dto.getSubBuildings().toArray(new String[dto.getSubBuildings().size()]))
+                .withBuilding(dto.getBuildings().toArray(new String[dto.getBuildings().size()]))
+                .withStreet(dto.getStreets().toArray(new String[dto.getStreets().size()]))
+                .withLocality(dto.getLocalities().toArray(new String[dto.getLocalities().size()]))
+                .withPostalCode(dto.getPostalCode())
+                .build();
+        return this;
+    }
+
+    /**
      * Validates the email validation request values.
      * @param expectedEmail The expected email.
      * @param expectedReferenceId The expected reference Id.
@@ -195,6 +218,25 @@ final class RequestBuilderTestsSteps {
         assertThat(this.enrichmentRequest.getReferenceId(), is(referenceId));
         assertNotNull(this.enrichmentRequest.getKeys());
         assertNotNull(this.enrichmentRequest.getAttributes());
+        return this;
+    }
+
+    /**
+     * Validates the address validation request values.
+     * @param expectedDto The expected address validation DTO.
+     * @return The steps.
+     */
+    RequestBuilderTestsSteps thenAddressValidationRequestShouldHave(final AddressValidationDto expectedDto) {
+        assertThat(this.addressValidationRequest.getReferenceId(), is(expectedDto.getReferenceId()));
+        assertThat(this.addressValidationRequest.getCountryIso(), is(expectedDto.getCountryIso()));
+        assertThat(this.addressValidationRequest.getDataset(), is(expectedDto.getDataset()));
+        assertTrue(this.addressValidationRequest.getDeliveryService().stream().allMatch(x -> expectedDto.getDeliveryServices().contains(x)));
+        assertTrue(this.addressValidationRequest.getOrganization().stream().allMatch(x -> expectedDto.getOrganizations().contains(x)));
+        assertTrue(this.addressValidationRequest.getSubBuilding().stream().allMatch(x -> expectedDto.getSubBuildings().contains(x)));
+        assertTrue(this.addressValidationRequest.getBuilding().stream().allMatch(x -> expectedDto.getBuildings().contains(x)));
+        assertTrue(this.addressValidationRequest.getStreet().stream().allMatch(x -> expectedDto.getStreets().contains(x)));
+        assertTrue(this.addressValidationRequest.getLocality().stream().allMatch(x -> expectedDto.getLocalities().contains(x)));
+        assertThat(this.addressValidationRequest.getPostalCode(), is(expectedDto.getPostalCode()));
         return this;
     }
 }

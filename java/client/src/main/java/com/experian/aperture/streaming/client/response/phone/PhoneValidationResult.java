@@ -1,11 +1,12 @@
 package com.experian.aperture.streaming.client.response.phone;
 
+import com.experian.aperture.streaming.client.response.Result;
 import com.google.gson.annotations.SerializedName;
 
 /**
  * Details about the result. Includes the validated data and its confidence level.
  */
-public final class PhoneValidationResult {
+public final class PhoneValidationResult implements Result {
     /**
      * The phone number that is the subject of the validation.
      * Examples: 6175014020

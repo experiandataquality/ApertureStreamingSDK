@@ -1,18 +1,22 @@
 package com.experian.aperture.streaming.client.handler;
 
 import com.experian.aperture.streaming.client.ConnectionException;
+import com.experian.aperture.streaming.client.list.AddressRequestList;
 import com.experian.aperture.streaming.client.RandomGenerator;
 import com.experian.aperture.streaming.client.list.EmailRequestList;
 import com.experian.aperture.streaming.client.list.EnrichmentRequestList;
 import com.experian.aperture.streaming.client.list.PhoneRequestList;
 import com.experian.aperture.streaming.client.options.OptionsBuilder;
+import com.experian.aperture.streaming.client.options.address.AddressValidationOptions;
 import com.experian.aperture.streaming.client.options.email.EmailValidationOptions;
 import com.experian.aperture.streaming.client.options.enrichment.EnrichmentOptions;
 import com.experian.aperture.streaming.client.options.phone.PhoneValidationOptions;
+import com.experian.aperture.streaming.client.proxy.AddressValidationRequestProxy;
 import com.experian.aperture.streaming.client.proxy.EmailValidationRequestProxy;
 import com.experian.aperture.streaming.client.proxy.EnrichmentRequestProxy;
 import com.experian.aperture.streaming.client.proxy.PhoneValidationRequestProxy;
 import com.experian.aperture.streaming.client.request.RequestBuilder;
+import com.experian.aperture.streaming.client.request.address.AddressValidationRequest;
 import com.experian.aperture.streaming.client.request.email.EmailValidationRequest;
 import com.experian.aperture.streaming.client.request.enrichment.*;
 import com.experian.aperture.streaming.client.request.phone.PhoneValidationRequest;
@@ -35,15 +39,18 @@ public class RequestResendHandlerTests {
         final EmailRequestList emailRequestList = getEmailRequestList(2);
         final PhoneRequestList phoneRequestList = getPhoneRequestList(0);
         final EnrichmentRequestList enrichmentRequestList = getEnrichmentRequestList(0);
+        final AddressRequestList addressRequestList = getAddressRequestList(0);
         this.steps
                 .givenISetupRequestContextWithEmailRequestList(emailRequestList)
                 .givenISetupRequestContextWithPhoneRequestList(phoneRequestList)
                 .givenISetupRequestContextWithEnrichmentRequestList(enrichmentRequestList)
+                .givenISetupRequestContextWithAddressRequestList(addressRequestList)
                 .givenIHaveRequestResendHandler()
                 .whenIResendRequest()
                 .thenEmailRequestIsSend(2)
                 .thenEnrichRequestIsSend(0)
-                .thenPhoneRequestIsSend(0);
+                .thenPhoneRequestIsSend(0)
+                .thenAddressRequestIsSend(0);
     }
 
     /**
@@ -55,15 +62,18 @@ public class RequestResendHandlerTests {
         final PhoneRequestList phoneRequestList = getPhoneRequestList(2);
         final EmailRequestList emailRequestList = getEmailRequestList(0);
         final EnrichmentRequestList enrichmentRequestList = getEnrichmentRequestList(0);
+        final AddressRequestList addressRequestList = getAddressRequestList(0);
         this.steps
                 .givenISetupRequestContextWithEmailRequestList(emailRequestList)
                 .givenISetupRequestContextWithPhoneRequestList(phoneRequestList)
                 .givenISetupRequestContextWithEnrichmentRequestList(enrichmentRequestList)
+                .givenISetupRequestContextWithAddressRequestList(addressRequestList)
                 .givenIHaveRequestResendHandler()
                 .whenIResendRequest()
                 .thenEmailRequestIsSend(0)
                 .thenEnrichRequestIsSend(0)
-                .thenPhoneRequestIsSend(2);
+                .thenPhoneRequestIsSend(2)
+                .thenAddressRequestIsSend(0);
     }
 
     /**
@@ -75,15 +85,41 @@ public class RequestResendHandlerTests {
         final PhoneRequestList phoneRequestList = getPhoneRequestList(0);
         final EmailRequestList emailRequestList = getEmailRequestList(0);
         final EnrichmentRequestList enrichmentRequestList = getEnrichmentRequestList(2);
+        final AddressRequestList addressRequestList = getAddressRequestList(0);
         this.steps
                 .givenISetupRequestContextWithEmailRequestList(emailRequestList)
                 .givenISetupRequestContextWithPhoneRequestList(phoneRequestList)
                 .givenISetupRequestContextWithEnrichmentRequestList(enrichmentRequestList)
+                .givenISetupRequestContextWithAddressRequestList(addressRequestList)
                 .givenIHaveRequestResendHandler()
                 .whenIResendRequest()
                 .thenEmailRequestIsSend(0)
                 .thenEnrichRequestIsSend(2)
-                .thenPhoneRequestIsSend(0);
+                .thenPhoneRequestIsSend(0)
+                .thenAddressRequestIsSend(0);
+    }
+
+    /**
+     * Test that enrichment requests are send when there are requests in the list.
+     * @throws ConnectionException The ConnectionException.
+     * */
+    @Test
+    public void should_senAddressRequest_whenAddressRequestListNotEmpty() throws ConnectionException {
+        final PhoneRequestList phoneRequestList = getPhoneRequestList(0);
+        final EmailRequestList emailRequestList = getEmailRequestList(0);
+        final EnrichmentRequestList enrichmentRequestList = getEnrichmentRequestList(0);
+        final AddressRequestList addressRequestList = getAddressRequestList(2);
+        this.steps
+                .givenISetupRequestContextWithEmailRequestList(emailRequestList)
+                .givenISetupRequestContextWithPhoneRequestList(phoneRequestList)
+                .givenISetupRequestContextWithEnrichmentRequestList(enrichmentRequestList)
+                .givenISetupRequestContextWithAddressRequestList(addressRequestList)
+                .givenIHaveRequestResendHandler()
+                .whenIResendRequest()
+                .thenEmailRequestIsSend(0)
+                .thenEnrichRequestIsSend(0)
+                .thenPhoneRequestIsSend(0)
+                .thenAddressRequestIsSend(2);
     }
 
     private EmailRequestList getEmailRequestList(final int requestCount) {
@@ -113,6 +149,15 @@ public class RequestResendHandlerTests {
         final EnrichmentOptions options = OptionsBuilder.builder().withEnrichmentOptions(false).getDefault();
         final EnrichmentRequestProxy proxy = new EnrichmentRequestProxy(request, options);
         final EnrichmentRequestList requestList = new EnrichmentRequestList();
+        for (int i = 0; i < requestCount; i++) {
+            requestList.add(proxy, this.referenceId + i);
+        }
+        return requestList;
+    }
+
+    private AddressRequestList getAddressRequestList(final int requestCount) {
+        final AddressValidationRequestProxy proxy = getAddressValidationRequestProxy();
+        final AddressRequestList requestList = new AddressRequestList();
         for (int i = 0; i < requestCount; i++) {
             requestList.add(proxy, this.referenceId + i);
         }
@@ -151,5 +196,22 @@ public class RequestResendHandlerTests {
                 .withKeys(datasetKeys)
                 .withAttributes(attributes)
                 .build();
+    }
+
+    private AddressValidationRequestProxy getAddressValidationRequestProxy() {
+        final AddressValidationRequest request =  RequestBuilder
+                .builder()
+                .withAddressValidationRequest(this.referenceId)
+                .withCountryIso("USA")
+                .withBuilding("DummyBuilding")
+                .withDataset("DummyDataSet")
+                .withDeliveryService("DummyDeliveryService")
+                .withLocality("DummyLocality")
+                .withOrganization("DummyOrganization")
+                .build();
+        final AddressValidationOptions options = OptionsBuilder.builder()
+                .withAddressOptions(false)
+                .build();
+        return new AddressValidationRequestProxy(request, options);
     }
 }

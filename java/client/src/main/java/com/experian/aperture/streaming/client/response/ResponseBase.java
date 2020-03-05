@@ -7,7 +7,7 @@ import com.google.gson.annotations.SerializedName;
  *
  * @param <T> The response result type.
  */
-public abstract class ResponseBase<T> {
+public abstract class ResponseBase<T extends Result> {
     /**
      * If you chose to submit a "Reference-Id" in the request header, the value will be returned with the response.
      *
@@ -132,6 +132,14 @@ public abstract class ResponseBase<T> {
     }
 
     /**
+     * Gets the transaction Id.
+     * @return The transaction Id.
+     */
+    public String getTransactionId() {
+        return this.transactionId;
+    }
+
+    /**
      * Gets the number of requests you have remaining in the current rate limit window.
      *
      * @return rate remaining.
@@ -147,5 +155,15 @@ public abstract class ResponseBase<T> {
      */
     public Long getRateReset() {
         return this.rateReset;
+    }
+
+
+    /**
+     * Gets the number of the rate limit.
+     *
+     * @return The rate limit.
+     */
+    public Long getRateLimit() {
+        return rateLimit;
     }
 }

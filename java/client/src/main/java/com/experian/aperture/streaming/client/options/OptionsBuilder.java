@@ -1,5 +1,6 @@
 package com.experian.aperture.streaming.client.options;
 
+import com.experian.aperture.streaming.client.options.address.AddressValidationOptions;
 import com.experian.aperture.streaming.client.options.email.EmailValidationOptions;
 import com.experian.aperture.streaming.client.options.enrichment.EnrichmentOptions;
 import com.experian.aperture.streaming.client.options.phone.PhoneValidationOptions;
@@ -33,6 +34,14 @@ public interface OptionsBuilder {
      * @return The Enrichment options builder.
      */
     EnrichmentOptionsBuilder withEnrichmentOptions(boolean addMetadata);
+
+    /**
+     * Specifies Address options builder.
+     *
+     * @param addMetadata the addMetadata.
+     * @return The Address options builder.
+     */
+    AddressValidationOptionsBuilder withAddressOptions(boolean addMetadata);
 
     /**
      * Gets the default options builder.
@@ -131,6 +140,14 @@ public interface OptionsBuilder {
         EnrichmentOptionsBuilder withLinkageRule(String linkageRule);
 
         /**
+         * Specifies the timeout waiting for validation response.
+         * Duration should be between 2 seconds to 5 seconds.
+         * @param timeout the timeout in seconds.
+         * @return The options builder.
+         */
+        EnrichmentOptionsBuilder withTimeout(Duration timeout);
+
+        /**
          * Builds the options when sending streaming request with the defined values.
          * @return The enrichment validation options.
          */
@@ -142,6 +159,38 @@ public interface OptionsBuilder {
          * @return The default enrichment options.
          */
         EnrichmentOptions getDefault();
+    }
 
+    /**
+     * Defines the AddressValidation options builder.
+     */
+    interface AddressValidationOptionsBuilder {
+        /**
+         * Specifies the timeout waiting for validation response.
+         * Duration should be between 2 seconds to 15 seconds.
+         * @param timeout the timeout in seconds.
+         * @return The options builder.
+         */
+        AddressValidationOptionsBuilder withTimeout(Duration timeout);
+
+        /**
+         * Specifies whether to return include components in response.
+         * @param includeComponents the include components.
+         * @return The options builder.
+         */
+        AddressValidationOptionsBuilder withIncludeComponents(boolean includeComponents);
+
+        /**
+         * Builds the options when sending streaming request with the defined values.
+         * @return The address validation options.
+         */
+        AddressValidationOptions build();
+
+        /**
+         * Gets the default email address options values.
+         *
+         * @return The default address validation options.
+         */
+        AddressValidationOptions getDefault();
     }
 }

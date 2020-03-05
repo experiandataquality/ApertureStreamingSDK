@@ -29,6 +29,9 @@ final class DefaultErrorResponseHandler implements ErrorResponseHandler {
             case ENRICHMENT_REQUEST:
                 this.requestContext.getEnrichmentRequestList().remove(referenceId);
                 break;
+            case ADDRESS_REQUEST:
+                this.requestContext.getAddressRequestList().remove(referenceId);
+                break;
             default:
                 return;
         }

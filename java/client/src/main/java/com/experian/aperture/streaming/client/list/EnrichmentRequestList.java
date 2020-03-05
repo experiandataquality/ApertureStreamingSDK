@@ -7,7 +7,7 @@ import java.util.HashMap;
 /**
  * Defines the enrichment request list methods.
  */
-public class EnrichmentRequestList extends BaseRequestList<EnrichmentRequestProxy> {
+public final class EnrichmentRequestList extends BaseRequestList<EnrichmentRequestProxy> {
     private HashMap<String, EnrichmentRequestProxy> requests = new HashMap<>();
 
     @Override

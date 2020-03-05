@@ -6,10 +6,12 @@ import com.experian.aperture.streaming.client.handler.ResponseManager;
 import com.experian.aperture.streaming.client.list.RequestContext;
 import com.experian.aperture.streaming.client.list.RequestList;
 import com.experian.aperture.streaming.client.options.OptionsBuilder;
+import com.experian.aperture.streaming.client.proxy.AddressValidationRequestProxy;
 import com.experian.aperture.streaming.client.proxy.EmailValidationRequestProxy;
 import com.experian.aperture.streaming.client.proxy.EnrichmentRequestProxy;
 import com.experian.aperture.streaming.client.proxy.PhoneValidationRequestProxy;
 import com.experian.aperture.streaming.client.request.RequestBuilder;
+import com.experian.aperture.streaming.client.request.address.AddressValidationRequest;
 import com.experian.aperture.streaming.client.request.email.EmailValidationRequest;
 import com.experian.aperture.streaming.client.request.enrichment.*;
 import com.experian.aperture.streaming.client.request.phone.PhoneValidationRequest;
@@ -22,6 +24,7 @@ import java.time.Duration;
 
 import static org.mockito.Mockito.*;
 
+@SuppressWarnings("checkstyle:ClassFanOutComplexity")
 final class RequestManagerTestsSteps {
     private RequestContext requestContext = mock(RequestContext.class);
     private Connection connection = mock(Connection.class);
@@ -29,10 +32,12 @@ final class RequestManagerTestsSteps {
     private RequestList<EmailValidationRequestProxy> emailRequestList = (RequestList<EmailValidationRequestProxy>) mock(RequestList.class);
     private RequestList<PhoneValidationRequestProxy> phoneRequestList = (RequestList<PhoneValidationRequestProxy>) mock(RequestList.class);
     private RequestList<EnrichmentRequestProxy> enrichmentRequestList = (RequestList<EnrichmentRequestProxy>) mock(RequestList.class);
+    private RequestList<AddressValidationRequestProxy> addressRequestList = (RequestList<AddressValidationRequestProxy>) mock(RequestList.class);
     private RequestManager requestManager;
     private EmailValidationRequestProxy proxy;
     private PhoneValidationRequestProxy phoneValidationRequestProxy;
     private EnrichmentRequestProxy enrichmentRequestProxy;
+    private AddressValidationRequestProxy addressValidationRequestProxy;
     private Single<Void> mockSubscribe = (Single<Void>) mock(Single.class);
     private PublishSubject<ConnectionEvent> mockSubject = PublishSubject.create();
     private String randomString = RandomGenerator.generateRandomString();
@@ -247,6 +252,49 @@ final class RequestManagerTestsSteps {
     }
 
     /**
+     * Setup the address request.
+     * @param containsKeyValue The keys value.
+     * @param canAddValue The values.
+     * @return RequestManagerTestsSteps steps.
+     */
+    RequestManagerTestsSteps whenISetupAddress(final Boolean containsKeyValue, final Boolean canAddValue) {
+        when(this.addressRequestList.containsKey(any(String.class))).thenReturn(containsKeyValue);
+        when(this.addressRequestList.canAdd()).thenReturn(canAddValue);
+        doNothing().when(this.addressRequestList).add(isA(AddressValidationRequestProxy.class), isA(String.class));
+        when(this.requestContext.getAddressRequestList()).thenReturn(this.addressRequestList);
+        return this;
+    }
+
+    /**
+     * Send the address request.
+     *
+     * @throws RateLimitException Throws the RateLimitException.
+     * @throws ConnectionException Throws the ConnectionException.
+     * @return RequestManagerTestsSteps steps.
+     */
+    RequestManagerTestsSteps whenISendAddressRequest() throws RateLimitException, ConnectionException {
+        this.addressValidationRequestProxy = new AddressValidationRequestProxy(this.createAddressRequest(), OptionsBuilder.builder().withAddressOptions(true).withTimeout(Duration.ofSeconds(3)).build());
+        this.requestManager.onAddressRequest(this.addressValidationRequestProxy);
+        return this;
+    }
+
+    /**
+     * Assert the address request.
+     *
+     * @param expectedSend The number of expected send to be invoked.
+     * @param expectedList The number of expected get request list to be invoked.
+     * @param expectedAddressRequestList The number of add method to be invoked.
+     * @throws ConnectionException Throws the ConnectionException.
+     * @return RequestManagerTestsSteps steps.
+     */
+    RequestManagerTestsSteps thenIShouldGetAddressRequest(final int expectedSend, final int expectedList, final int expectedAddressRequestList) throws ConnectionException {
+        verify(this.connection, times(expectedSend)).send(eq(StreamingMethod.ADDRESS_REQUEST.getValue()), eq(addressValidationRequestProxy));
+        verify(this.requestContext, times(expectedList)).getAddressRequestList();
+        verify(this.addressRequestList, times(expectedAddressRequestList)).add(addressValidationRequestProxy, addressValidationRequestProxy.getReferenceId());
+        return this;
+    }
+
+    /**
      * Setup the connection.
      * @return RequestManagerTestsSteps steps.
      */
@@ -304,6 +352,19 @@ final class RequestManagerTestsSteps {
                 .withCountry("country")
                 .withKeys(datasetKeys)
                 .withAttributes(attributes)
+                .build();
+    }
+
+    /**
+     * Create the address request.
+     *
+     * @return address request.
+     */
+    private AddressValidationRequest createAddressRequest() {
+        return RequestBuilder.builder()
+                .withAddressValidationRequest("test")
+                .withCountryIso("USA")
+                .withStreet("Summer St")
                 .build();
     }
 }

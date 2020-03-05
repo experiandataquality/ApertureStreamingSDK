@@ -1,13 +1,16 @@
 package com.experian.aperture.streaming.client;
 
+import com.experian.aperture.streaming.client.options.address.AddressValidationOptions;
 import com.experian.aperture.streaming.client.options.email.EmailValidationOptions;
 import com.experian.aperture.streaming.client.options.enrichment.EnrichmentOptions;
 import com.experian.aperture.streaming.client.options.phone.PhoneValidationOptions;
+import com.experian.aperture.streaming.client.request.address.AddressValidationRequest;
 import com.experian.aperture.streaming.client.request.email.EmailValidationRequest;
 import com.experian.aperture.streaming.client.request.enrichment.EnrichmentRequest;
 import com.experian.aperture.streaming.client.request.phone.PhoneValidationRequest;
 import com.experian.aperture.streaming.client.response.ConnectionFailResponse;
 import com.experian.aperture.streaming.client.response.FailRequestResponse;
+import com.experian.aperture.streaming.client.response.address.AddressValidationResponse;
 import com.experian.aperture.streaming.client.response.email.EmailValidationResponse;
 import com.experian.aperture.streaming.client.response.enrichment.EnrichmentResponse;
 import com.experian.aperture.streaming.client.response.phone.PhoneValidationResponse;
@@ -51,6 +54,13 @@ public interface Client {
     void setEnrichmentOptions(EnrichmentOptions options);
 
     /**
+     * Specifies the address options when streaming.
+     *
+     * @param options The address options.
+     */
+    void setAddressOptions(AddressValidationOptions options);
+
+    /**
      * Registers the handler when an email validation response has been received.
      *
      * @param responseHandler The response callback.
@@ -70,6 +80,13 @@ public interface Client {
      * @param responseHandler The response callback.
      */
     void onPhoneResponse(ConnectionResponse<PhoneValidationResponse> responseHandler);
+
+    /**
+     * Registers the handler when an address validation response has been received.
+     *
+     * @param responseHandler The response callback.
+     */
+    void onAddressResponse(ConnectionResponse<AddressValidationResponse> responseHandler);
 
     /**
      * Sends an email validation request.
@@ -100,6 +117,16 @@ public interface Client {
      * @throws ConnectionException Thrown when sending request while the connection is not active.
      */
     void onEnrichmentRequest(EnrichmentRequest enrichmentRequest) throws RateLimitException, ConnectionException;
+
+    /**
+     * Sends an address request.
+     * This method also ensure the connection exist and start or reconnect before sending the request.
+     *
+     * @param addressValidationRequest The address request object.
+     * @throws RateLimitException The rate limit exception that should be handled by user.
+     * @throws ConnectionException Thrown when sending request while the connection is not active.
+     */
+    void onAddressRequest(AddressValidationRequest addressValidationRequest) throws RateLimitException, ConnectionException;
 
     /**
      * Subscribes to any request failure event.

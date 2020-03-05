@@ -1,16 +1,13 @@
 package com.experian.aperture.streaming.client.request.phone;
 
+import com.experian.aperture.streaming.client.ResourceReader;
 import com.experian.aperture.streaming.client.guard.Contract;
+import com.experian.aperture.streaming.client.request.RequestBase;
 
 /**
  * The phone validation request model.
  */
-public final class PhoneValidationRequest {
-    /**
-     * Optional identifier that will be returned in the response to help you track the request.
-     */
-    private String referenceId;
-
+public final class PhoneValidationRequest extends RequestBase {
     /**
      * The phone number that is the subject of the validation.
      * Examples: 6175014020.
@@ -29,21 +26,11 @@ public final class PhoneValidationRequest {
     private int cacheValueDays;
 
     PhoneValidationRequest(final String referenceId, final String number, final String outputFormat, final int cacheValueDays) {
-        Contract.requiresNotEmpty(referenceId, "The reference_id field is required.");
-        Contract.requiresNotWhiteSpaces(referenceId, "The reference_id field must not be empty spaces.");
-        Contract.requiresNotEmpty(number, "The number field is required.");
-        this.referenceId = referenceId;
+        super(referenceId);
+        Contract.requiresNotEmpty(number, ResourceReader.getErrorMessageWithKey("PhoneNumberRequired"));
         this.number = number;
         this.outputFormat = outputFormat;
         this.cacheValueDays = cacheValueDays;
-    }
-
-    /**
-     * Gets the reference Id.
-     * @return The reference Id.
-     */
-    public String getReferenceId() {
-        return this.referenceId;
     }
 
     /**

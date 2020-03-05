@@ -1,5 +1,6 @@
 package com.experian.aperture.streaming.client.options;
 
+import com.experian.aperture.streaming.client.ResourceReader;
 import com.experian.aperture.streaming.client.guard.Contract;
 
 /**
@@ -7,7 +8,8 @@ import com.experian.aperture.streaming.client.guard.Contract;
  * */
 final class DefaultRetryOptionsBuilder implements RetryOptionsBuilder {
     private final int minimumAllowValue = 1;
-    private final String validationMessage = "The value for '%s' should be above or equal to %d";
+    private final String restartIntervalInMillisecondsMessage = ResourceReader.getErrorMessageWithKeyFormat("RetryOptionsMinimumValueRequired", "restartIntervalInMilliseconds", minimumAllowValue);
+    private final String reconnectionCount = ResourceReader.getErrorMessageWithKeyFormat("RetryOptionsMinimumValueRequired", "reconnectCount", minimumAllowValue);
     private final long defaultRestartWaitTimeInMilliseconds = 60000;
     private final int defaultReconnectCount = 30;
     private final boolean defaultEnableAutoReconnect = true;
@@ -17,14 +19,14 @@ final class DefaultRetryOptionsBuilder implements RetryOptionsBuilder {
 
     @Override
     public RetryOptionsBuilder withRestartIntervalInMilliseconds(final long restartIntervalInMilliseconds) {
-        Contract.requiresGreaterOrEqualThan(minimumAllowValue, restartIntervalInMilliseconds, String.format(validationMessage, "restartIntervalInMilliseconds", 1));
+        Contract.requiresGreaterOrEqualThan(minimumAllowValue, restartIntervalInMilliseconds, restartIntervalInMillisecondsMessage);
         this.restartWaitTimeInMilliseconds = restartIntervalInMilliseconds;
         return this;
     }
 
     @Override
     public RetryOptionsBuilder withReconnectionCount(final int reconnectCount) {
-        Contract.requiresGreaterOrEqualThan(minimumAllowValue, reconnectCount, String.format(validationMessage, "reconnectCount", 1));
+        Contract.requiresGreaterOrEqualThan(minimumAllowValue, reconnectCount, reconnectionCount);
         this.reconnectCount = reconnectCount;
         return this;
     }

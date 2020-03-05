@@ -74,13 +74,13 @@ public final class Contract {
      * @throws IllegalArgumentException throws the exception.
      */
     public static void requiresReferenceIdAlphanumeric(final String referenceId, final String message) {
-        if (!referenceId.matches("[A-Za-z0-9-:\\s]+")) {
+        if (!referenceId.matches("[\\w\\-\\/\\:]+")) {
             throw new IllegalArgumentException(message);
         }
     }
 
     /**
-     * Throw an exception if the reference id is more than 256 characters..
+     * Throw an exception if the reference id is more than 256 characters.
      * @param referenceId The reference id of the requests.
      * @param message The response error message.
      * @throws IllegalArgumentException throws the exception.

@@ -1,5 +1,6 @@
 package com.experian.aperture.streaming.client.request;
 
+import com.experian.aperture.streaming.client.request.address.DefaultAddressValidationRequestBuilder;
 import com.experian.aperture.streaming.client.request.email.DefaultEmailValidationRequestBuilder;
 import com.experian.aperture.streaming.client.request.enrichment.DefaultEnrichmentRequestBuilder;
 import com.experian.aperture.streaming.client.request.phone.DefaultPhoneValidationRequestBuilder;
@@ -20,5 +21,10 @@ public final class DefaultRequestBuilder implements RequestBuilder {
     @Override
     public EnrichmentRequestBuilder withEnrichmentRequest(final String referenceId) {
         return new DefaultEnrichmentRequestBuilder(referenceId);
+    }
+
+    @Override
+    public AddressValidationRequestBuilder withAddressValidationRequest(final String referenceId) {
+        return new DefaultAddressValidationRequestBuilder(referenceId);
     }
 }

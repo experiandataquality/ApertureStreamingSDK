@@ -1,6 +1,7 @@
 package com.experian.aperture.streaming.client;
 
 import com.experian.aperture.streaming.client.request.RequestBuilder;
+import com.experian.aperture.streaming.client.request.address.AddressValidationRequest;
 import com.experian.aperture.streaming.client.request.email.EmailValidationRequest;
 import com.experian.aperture.streaming.client.request.enrichment.*;
 import com.experian.aperture.streaming.client.request.phone.PhoneValidationRequest;
@@ -103,6 +104,20 @@ public class ClientBuilderTests {
     }
 
     /**
+     * Assert that the server side validate address is invoked on request manager.
+     *
+     * @throws RateLimitException Throws the RateLimitException.
+     * @throws ConnectionException Throws the ConnectionException.
+     */
+    @Test
+    public void onAddressRequest_SendRequestToRequestManager() throws RateLimitException, ConnectionException {
+        steps
+            .givenISetupClient()
+            .whenISendAddressRequest(this.createAddressRequest())
+            .thenIShouldGetAddressRequest();
+    }
+
+    /**
      * Assert that the server side validate on email response is invoked on request manager.
      *
      */
@@ -139,6 +154,18 @@ public class ClientBuilderTests {
     }
 
     /**
+     * Assert that the server side validate on address response is invoked on request manager.
+     *
+     */
+    @Test
+    public void onAddressResponse_GetResponse() {
+        steps
+            .givenISetupClient()
+            .whenISendAddressResponse()
+            .thenIShouldGetAddressResponse();
+    }
+
+    /**
      * Assert that exception is thrown when null EmailValidationRequest is provided.
      * @throws RateLimitException The RateLimitException.
      * @throws ConnectionException The ConnectionException.
@@ -172,6 +199,18 @@ public class ClientBuilderTests {
         exception.expect(IllegalArgumentException.class);
         exception.expectMessage("The enrichmentRequest field is required.");
         steps.givenISetupClient().whenISendEnrichmentRequest(null);
+    }
+
+    /**
+     * Assert that exception is thrown when null AddressRequest is provided.
+     * @throws RateLimitException The RateLimitException.
+     * @throws ConnectionException The ConnectionException.
+     */
+    @Test
+    public void onAddressRequest_nullAddressRequest_ThrowException() throws RateLimitException, ConnectionException {
+        exception.expect(IllegalArgumentException.class);
+        exception.expectMessage("The addressRequest field is required.");
+        steps.givenISetupClient().whenISendAddressRequest(null);
     }
 
     /**
@@ -214,6 +253,19 @@ public class ClientBuilderTests {
                 .withKeys(datasetKeys)
                 .withAttributes(attributes)
                 .withCountry("country")
+                .build();
+    }
+
+    /**
+     * Create the address request.
+     *
+     * @return address request.
+     */
+    private AddressValidationRequest createAddressRequest() {
+        return RequestBuilder.builder()
+                .withAddressValidationRequest("test")
+                .withCountryIso("USA")
+                .withStreet("Summer St")
                 .build();
     }
 }

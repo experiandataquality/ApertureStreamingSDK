@@ -7,7 +7,7 @@ import java.util.HashMap;
 /**
  * Defines the email request list methods.
  */
-public class EmailRequestList extends BaseRequestList<EmailValidationRequestProxy> {
+public final class EmailRequestList extends BaseRequestList<EmailValidationRequestProxy> {
     private HashMap<String, EmailValidationRequestProxy> requests = new HashMap<>();
 
     @Override

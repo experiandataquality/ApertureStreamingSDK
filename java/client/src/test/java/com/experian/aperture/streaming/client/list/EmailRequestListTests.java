@@ -49,7 +49,7 @@ public final class EmailRequestListTests {
     @Test
     public void add_shouldThrowExceptionWhenAddingNewRequestWithSameReferenceId() throws IllegalArgumentException {
         expectedException.expect(IllegalArgumentException.class);
-        expectedException.expectMessage(String.format("Duplicate reference Id %s.", this.referenceId1));
+        expectedException.expectMessage(String.format("Duplicate referenceId %s.", this.referenceId1));
         this.steps
                 .givenISetupEmailRequestList()
                 .whenIAddNewEmailRequest(this.input1, this.referenceId1)

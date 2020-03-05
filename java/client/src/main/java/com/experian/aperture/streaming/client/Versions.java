@@ -6,7 +6,8 @@ package com.experian.aperture.streaming.client;
 public enum Versions {
     EMAIL_VALIDATION_REQUEST("1.0"),
     ENRICHMENT_REQUEST("1.0"),
-    PHONE_VALIDATION_REQUEST("1.0");
+    PHONE_VALIDATION_REQUEST("1.0"),
+    ADDRESS_VALIDATION_REQUEST("1.0");
 
     private String value;
 

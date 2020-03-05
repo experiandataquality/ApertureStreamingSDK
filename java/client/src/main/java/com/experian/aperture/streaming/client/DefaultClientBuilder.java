@@ -1,6 +1,7 @@
 package com.experian.aperture.streaming.client;
 
 import com.experian.aperture.streaming.client.options.OptionsBuilder;
+import com.experian.aperture.streaming.client.options.address.AddressValidationOptions;
 import com.experian.aperture.streaming.client.options.email.EmailValidationOptions;
 import com.experian.aperture.streaming.client.options.enrichment.EnrichmentOptions;
 import com.experian.aperture.streaming.client.options.phone.PhoneValidationOptions;
@@ -13,6 +14,7 @@ final class DefaultClientBuilder implements ClientBuilder, ClientBuilder.ClientC
     private EmailValidationOptions emailValidationOptions = OptionsBuilder.builder().withEmailOptions(true).getDefault();
     private EnrichmentOptions enrichmentOptions =  OptionsBuilder.builder().withEnrichmentOptions(true).getDefault();
     private PhoneValidationOptions phoneValidationOptions = OptionsBuilder.builder().withPhoneOptions(true).getDefault();
+    private AddressValidationOptions addressValidationOptions = OptionsBuilder.builder().withAddressOptions(true).getDefault();
 
     /**
      * Specifies the streaming endpoint url.
@@ -59,6 +61,17 @@ final class DefaultClientBuilder implements ClientBuilder, ClientBuilder.ClientC
     }
 
     /**
+     * Specifies the address validation options when streaming.
+     *
+     * @param options The address validation options.
+     * @return The streaming client builder.
+     */
+    public ClientConfigurationBuilder withAddressOptions(final AddressValidationOptions options) {
+        this.addressValidationOptions = options;
+        return this;
+    }
+
+    /**
      * Build the streaming client based on the configured options.
      *
      * @return The streaming client.
@@ -69,6 +82,7 @@ final class DefaultClientBuilder implements ClientBuilder, ClientBuilder.ClientC
         client.setEmailOptions(this.emailValidationOptions);
         client.setEnrichmentOptions(this.enrichmentOptions);
         client.setPhoneOptions(this.phoneValidationOptions);
+        client.setAddressOptions(this.addressValidationOptions);
         return client;
     }
 }

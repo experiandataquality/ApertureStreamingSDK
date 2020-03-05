@@ -7,10 +7,12 @@ public enum StreamingMethod {
     EMAIL_REQUEST("ValidateEmail"),
     ENRICHMENT_REQUEST("Enrich"),
     PHONE_REQUEST("ValidatePhone"),
+    ADDRESS_REQUEST("ValidateAddress"),
 
     EMAIL_RESPONSE("OnEmailResponse"),
     ENRICHMENT_RESPONSE("OnEnrichResponse"),
-    PHONE_RESPONSE("OnPhoneResponse");
+    PHONE_RESPONSE("OnPhoneResponse"),
+    ADDRESS_RESPONSE("OnAddressResponse");
 
     private String value;
 
