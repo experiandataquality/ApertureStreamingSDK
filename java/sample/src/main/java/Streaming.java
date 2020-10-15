@@ -42,8 +42,8 @@ public class Streaming {
     private static int requestsCount = 0;
 
     public static void main(String[] args) {
-        final String url = "https://edq-realtimehub-dev-uksouth.azurewebsites.net/stream/v1";
-        final String token = "cc670f51-30e0-40ad-b7cf-ac6f84d4b065";
+        final String url = args[0];
+        final String token = args[1];
 
         URL endpoint = null;
         try {
