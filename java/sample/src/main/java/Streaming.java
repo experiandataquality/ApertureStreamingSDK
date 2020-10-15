@@ -164,7 +164,7 @@ public class Streaming {
                     String countryIso = getInput();
                     System.out.println("Enter get ported date option (true/false):");
                     Scanner sn = new Scanner(System.in);
-                    boolean getPortedDate = true;
+                    boolean getPortedDate = sn.nextBoolean();
                     sendPhoneRequest(client, number, countryIso, getPortedDate);
                     break;
 
