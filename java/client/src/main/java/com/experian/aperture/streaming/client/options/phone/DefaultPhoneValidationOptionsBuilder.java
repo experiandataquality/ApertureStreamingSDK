@@ -14,11 +14,15 @@ public final class DefaultPhoneValidationOptionsBuilder implements OptionsBuilde
     private final boolean defaultAddMetadata = true;
     private final String defaultOutputFormat = "E164";
     private final int defaultCacheValueDays = 7;
+    private final String defaultCountryIso = null;
     private final Duration defaultTimeout = Duration.ofSeconds(15);
+    private final boolean defaultGetPortedDate = false;
     private final boolean addMetadata;
     private String outputFormat = defaultOutputFormat;
     private int cacheValueDays = defaultCacheValueDays;
     private Duration timeout = defaultTimeout;
+    private String countryIso = defaultCountryIso;
+    private boolean getPortedDate = defaultGetPortedDate;
 
     public DefaultPhoneValidationOptionsBuilder(final boolean addMetadata) {
         this.addMetadata = addMetadata;
@@ -33,6 +37,30 @@ public final class DefaultPhoneValidationOptionsBuilder implements OptionsBuilde
     @Override
     public OptionsBuilder.PhoneValidationOptionsBuilder withOutputFormat(final String outputFormat) {
         this.outputFormat = outputFormat;
+        return this;
+    }
+
+    /**
+     * Specifies the country Iso.
+     * Examples: 3-letter ISO country code.
+     * @param countryIso The country Iso.
+     * @return The phone validation options builder.
+     */
+    @Override
+    public OptionsBuilder.PhoneValidationOptionsBuilder withCountryIso(final String countryIso) {
+        this.countryIso = countryIso;
+        return this;
+    }
+
+    /**
+     * Specifies the boolean flag for ported date as part of the response.
+     * Examples: true, false.
+     * @param getPortedDate The get ported date.
+     * @return The phone validation options builder.
+     */
+    @Override
+    public OptionsBuilder.PhoneValidationOptionsBuilder withGetPortedDate(final boolean getPortedDate) {
+        this.getPortedDate = getPortedDate;
         return this;
     }
 
@@ -69,7 +97,7 @@ public final class DefaultPhoneValidationOptionsBuilder implements OptionsBuilde
      */
     @Override
     public PhoneValidationOptions build() {
-        return new PhoneValidationOptions(this.outputFormat, this.cacheValueDays, this.addMetadata, this.timeout);
+        return new PhoneValidationOptions(this.outputFormat, this.cacheValueDays, this.addMetadata, this.timeout, this.countryIso, this.getPortedDate);
     }
 
     /**
@@ -79,6 +107,6 @@ public final class DefaultPhoneValidationOptionsBuilder implements OptionsBuilde
      */
     @Override
     public PhoneValidationOptions getDefault() {
-        return new PhoneValidationOptions(defaultOutputFormat, defaultCacheValueDays, defaultAddMetadata, defaultTimeout);
+        return new PhoneValidationOptions(defaultOutputFormat, defaultCacheValueDays, defaultAddMetadata, defaultTimeout, defaultCountryIso, defaultGetPortedDate);
     }
 }

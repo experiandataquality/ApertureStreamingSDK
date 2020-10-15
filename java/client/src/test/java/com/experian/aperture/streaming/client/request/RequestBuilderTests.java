@@ -1,10 +1,7 @@
 package com.experian.aperture.streaming.client.request;
 
 import com.experian.aperture.streaming.client.RandomGenerator;
-import com.experian.aperture.streaming.client.request.enrichment.AusCVHousehold;
-import com.experian.aperture.streaming.client.request.enrichment.AusCVPerson;
-import com.experian.aperture.streaming.client.request.enrichment.AusCVPostcode;
-import com.experian.aperture.streaming.client.request.enrichment.Geocode;
+import com.experian.aperture.streaming.client.request.enrichment.*;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -221,11 +218,13 @@ public class RequestBuilderTests {
                 AusCVHousehold.STATE, AusCVHousehold.SUBURB);
         final List<AusCVPostcode> ausCVPostcodeList = Arrays.asList(AusCVPostcode.ADULTS_AT_ADDRESS_CODE, AusCVPostcode.ADULTS_AT_ADDRESS_DESCRIPTION);
         final List<AusCVPerson> ausCVPersonList = Arrays.asList(AusCVPerson.PIN, AusCVPerson.GENDER, AusCVPerson.HIN, AusCVPerson.LINKAGE_POSTCODE);
-        final List<Geocode> geocodeList = Arrays.asList(Geocode.LATITUDE, Geocode.LONGITUDE);
+        final List<Geocodes> geocodesList = Arrays.asList(Geocodes.LATITUDE, Geocodes.LONGITUDE);
+        final List<UsaRegionalGeocodes> usaRegionalGeocodesList = Arrays.asList(UsaRegionalGeocodes.LATITUDE, UsaRegionalGeocodes.LONGITUDE);
+        final List<UkLocationEssential> ukLocationEssentialList = Arrays.asList(UkLocationEssential.LATITUDE, UkLocationEssential.LONGITUDE, UkLocationEssential.UDPRN);
         this.steps
                 .givenISetupRequestBuilder()
-                .whenIBuildEnrichmentDatasetAttributes(ausCvHouseholdList, ausCVPostcodeList, ausCVPersonList, geocodeList)
-                .thenEnrichmentDatasetAttributesShouldHave(ausCvHouseholdList, ausCVPostcodeList, ausCVPersonList, geocodeList);
+                .whenIBuildEnrichmentDatasetAttributes(ausCvHouseholdList, ausCVPostcodeList, ausCVPersonList, geocodesList, usaRegionalGeocodesList, ukLocationEssentialList)
+                .thenEnrichmentDatasetAttributesShouldHave(ausCvHouseholdList, ausCVPostcodeList, ausCVPersonList, geocodesList, usaRegionalGeocodesList, ukLocationEssentialList);
     }
 
     /**
@@ -236,11 +235,11 @@ public class RequestBuilderTests {
         final String referenceId = "ref-1";
         final EnrichmentDatasetKeyDto dto = new EnrichmentDatasetKeyDto();
         dto.setDpid(randomString);
-        final List<Geocode> geocodeList = Arrays.asList(Geocode.LATITUDE, Geocode.LONGITUDE);
+        final List<Geocodes> geocodesList = Arrays.asList(Geocodes.LATITUDE, Geocodes.LONGITUDE);
         this.steps
                 .givenISetupRequestBuilder()
                 .whenIBuildEnrichmentDatasetKeys(dto)
-                .whenIBuildEnrichmentDatasetAttributes(Collections.emptyList(), Collections.emptyList(), Collections.emptyList(), geocodeList)
+                .whenIBuildEnrichmentDatasetAttributes(Collections.emptyList(), Collections.emptyList(), Collections.emptyList(), geocodesList, Collections.emptyList(), Collections.emptyList())
                 .whenIBuildEnrichmentRequest(referenceId, "country")
                 .thenEnrichmentRequestShouldHave("country", referenceId);
     }
@@ -253,13 +252,13 @@ public class RequestBuilderTests {
         final String referenceId = null;
         final EnrichmentDatasetKeyDto dto = new EnrichmentDatasetKeyDto();
         dto.setDpid(randomString);
-        final List<Geocode> geocodeList = Arrays.asList(Geocode.LATITUDE, Geocode.LONGITUDE);
+        final List<Geocodes> geocodesList = Arrays.asList(Geocodes.LATITUDE, Geocodes.LONGITUDE);
         exception.expect(IllegalArgumentException.class);
         exception.expectMessage("The referenceId field must not be empty spaces.");
         this.steps
                 .givenISetupRequestBuilder()
                 .whenIBuildEnrichmentDatasetKeys(dto)
-                .whenIBuildEnrichmentDatasetAttributes(Collections.emptyList(), Collections.emptyList(), Collections.emptyList(), geocodeList)
+                .whenIBuildEnrichmentDatasetAttributes(Collections.emptyList(), Collections.emptyList(), Collections.emptyList(), geocodesList, Collections.emptyList(), Collections.emptyList())
                 .whenIBuildEnrichmentRequest(referenceId, "country")
                 .thenEnrichmentRequestShouldHave("country", referenceId);
     }
@@ -272,13 +271,13 @@ public class RequestBuilderTests {
         final String referenceId = "";
         final EnrichmentDatasetKeyDto dto = new EnrichmentDatasetKeyDto();
         dto.setDpid(randomString);
-        final List<Geocode> geocodeList = Arrays.asList(Geocode.LATITUDE, Geocode.LONGITUDE);
+        final List<Geocodes> geocodesList = Arrays.asList(Geocodes.LATITUDE, Geocodes.LONGITUDE);
         exception.expect(IllegalArgumentException.class);
         exception.expectMessage("The referenceId field must not be empty spaces.");
         this.steps
                 .givenISetupRequestBuilder()
                 .whenIBuildEnrichmentDatasetKeys(dto)
-                .whenIBuildEnrichmentDatasetAttributes(Collections.emptyList(), Collections.emptyList(), Collections.emptyList(), geocodeList)
+                .whenIBuildEnrichmentDatasetAttributes(Collections.emptyList(), Collections.emptyList(), Collections.emptyList(), geocodesList, Collections.emptyList(), Collections.emptyList())
                 .whenIBuildEnrichmentRequest(referenceId, "country")
                 .thenEnrichmentRequestShouldHave("country", referenceId);
     }
@@ -292,13 +291,13 @@ public class RequestBuilderTests {
         final String country = null;
         final EnrichmentDatasetKeyDto dto = new EnrichmentDatasetKeyDto();
         dto.setDpid(randomString);
-        final List<Geocode> geocodeList = Arrays.asList(Geocode.LATITUDE, Geocode.LONGITUDE);
+        final List<Geocodes> geocodesList = Arrays.asList(Geocodes.LATITUDE, Geocodes.LONGITUDE);
         exception.expect(IllegalArgumentException.class);
         exception.expectMessage("The countryIso field is required.");
         this.steps
                 .givenISetupRequestBuilder()
                 .whenIBuildEnrichmentDatasetKeys(dto)
-                .whenIBuildEnrichmentDatasetAttributes(Collections.emptyList(), Collections.emptyList(), Collections.emptyList(), geocodeList)
+                .whenIBuildEnrichmentDatasetAttributes(Collections.emptyList(), Collections.emptyList(), Collections.emptyList(), geocodesList, Collections.emptyList(), Collections.emptyList())
                 .whenIBuildEnrichmentRequest(referenceId, country)
                 .thenEnrichmentRequestShouldHave(country, referenceId);
     }
@@ -312,13 +311,13 @@ public class RequestBuilderTests {
         final String country = "";
         final EnrichmentDatasetKeyDto dto = new EnrichmentDatasetKeyDto();
         dto.setDpid(randomString);
-        final List<Geocode> geocodeList = Arrays.asList(Geocode.LATITUDE, Geocode.LONGITUDE);
+        final List<Geocodes> geocodesList = Arrays.asList(Geocodes.LATITUDE, Geocodes.LONGITUDE);
         exception.expect(IllegalArgumentException.class);
         exception.expectMessage("The countryIso field is required.");
         this.steps
                 .givenISetupRequestBuilder()
                 .whenIBuildEnrichmentDatasetKeys(dto)
-                .whenIBuildEnrichmentDatasetAttributes(Collections.emptyList(), Collections.emptyList(), Collections.emptyList(), geocodeList)
+                .whenIBuildEnrichmentDatasetAttributes(Collections.emptyList(), Collections.emptyList(), Collections.emptyList(), geocodesList, Collections.emptyList(), Collections.emptyList())
                 .whenIBuildEnrichmentRequest(referenceId, country)
                 .thenEnrichmentRequestShouldHave(country, referenceId);
     }
@@ -346,12 +345,12 @@ public class RequestBuilderTests {
     @Test
     public void withEnrichmentRequest_shouldThrowErrorWhenKeysIsNull() {
         final String referenceId = "ref-1";
-        final List<Geocode> geocodeList = Arrays.asList(Geocode.LATITUDE, Geocode.LONGITUDE);
+        final List<Geocodes> geocodesList = Arrays.asList(Geocodes.LATITUDE, Geocodes.LONGITUDE);
         exception.expect(IllegalArgumentException.class);
         exception.expectMessage("The keys field is required.");
         this.steps
                 .givenISetupRequestBuilder()
-                .whenIBuildEnrichmentDatasetAttributes(Collections.emptyList(), Collections.emptyList(), Collections.emptyList(), geocodeList)
+                .whenIBuildEnrichmentDatasetAttributes(Collections.emptyList(), Collections.emptyList(), Collections.emptyList(), geocodesList, Collections.emptyList(), Collections.emptyList())
                 .whenIBuildEnrichmentRequest(referenceId, "country")
                 .thenEnrichmentRequestShouldHave("country", referenceId);
     }

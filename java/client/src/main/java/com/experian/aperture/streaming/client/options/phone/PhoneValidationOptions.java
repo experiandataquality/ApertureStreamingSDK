@@ -26,11 +26,23 @@ public final class PhoneValidationOptions extends OptionsBase {
      */
     private boolean addMetadata;
 
-    PhoneValidationOptions(final String outputFormat, final int cacheValueDays, final boolean addMetadata, final Duration timeout) {
+    /**
+     * The 3-letter ISO country code.
+     */
+    private String countryIso;
+
+    /**
+     * Boolean value get ported date.
+     */
+    private boolean getPortedDate;
+
+    PhoneValidationOptions(final String outputFormat, final int cacheValueDays, final boolean addMetadata, final Duration timeout, final String countryIso, final  boolean getPortedDate) {
         super(timeout);
         this.outputFormat = outputFormat;
         this.cacheValueDays = cacheValueDays;
         this.addMetadata = addMetadata;
+        this.countryIso = countryIso;
+        this.getPortedDate = getPortedDate;
     }
 
     /**
@@ -56,5 +68,21 @@ public final class PhoneValidationOptions extends OptionsBase {
      */
     public boolean getAddMetadata() {
         return this.addMetadata;
+    }
+
+    /**
+     * Gets the country Iso in 3 character length.
+     * @return the 3-letter ISO country code.
+     */
+    public String getCountryIso() {
+        return this.countryIso;
+    }
+
+    /**
+     * Gets the get ported date.
+     * @return boolean value.
+     */
+    public boolean getGetPortedDate() {
+        return this.getPortedDate;
     }
 }

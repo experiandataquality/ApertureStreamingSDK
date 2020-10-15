@@ -80,6 +80,22 @@ public interface RequestBuilder {
         PhoneValidationRequestBuilder withCacheValueDays(int cacheValueDays);
 
         /**
+         * Specifies to include a Country Iso.
+         *
+         * @param countryIso The Country Iso.
+         * @return The phone validation request builder.
+         */
+        PhoneValidationRequestBuilder withCountryIso(String countryIso);
+
+        /**
+         * An optional boolean flag to specify the ported date as part of the response. The default value of boolean flag is false.
+         *
+         * @param getPortedDate The get ported date.
+         * @return The phone validation request builder.
+         */
+        PhoneValidationRequestBuilder withGetPortedDate(boolean getPortedDate);
+
+        /**
          * Builds the phone validation request with the defined values.
          *
          * @return The phone validation request.
