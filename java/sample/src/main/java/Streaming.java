@@ -16,6 +16,7 @@ import com.experian.aperture.streaming.client.response.address.AddressValidation
 import com.experian.aperture.streaming.client.response.address.AddressValidationResult;
 import com.experian.aperture.streaming.client.response.email.EmailValidationResponse;
 import com.experian.aperture.streaming.client.response.email.EmailValidationResult;
+import com.experian.aperture.streaming.client.response.enrichment.EnrichmentMetadata;
 import com.experian.aperture.streaming.client.response.enrichment.EnrichmentResponse;
 import com.experian.aperture.streaming.client.response.enrichment.EnrichmentResult;
 import com.experian.aperture.streaming.client.response.phone.PhoneValidationMetadata;
@@ -23,6 +24,7 @@ import com.experian.aperture.streaming.client.response.phone.PhoneValidationResp
 import com.experian.aperture.streaming.client.response.phone.PhoneValidationResult;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import io.reactivex.disposables.Disposable;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -56,10 +58,10 @@ public class Streaming {
                                                         .build();
 
         EnrichmentOptions enrichmentOptions = OptionsBuilder.builder()
-                                                .withEnrichmentOptions(false)
+                                                .withEnrichmentOptions(true)
                                                 .withMatchRule(null)
                                                 .withLinkageRule("Relational")
-                                                .withTimeout(Duration.ofSeconds(3))
+                                                .withTimeout(Duration.ofSeconds(15))
                                                 .build();
 
         AddressValidationOptions addressOptions = OptionsBuilder.builder()
@@ -68,12 +70,12 @@ public class Streaming {
                 .withIncludeComponents(true)
                 .build();
 
-
         RetryOptions retryOptions = RetryOptionsBuilder.builder()
                 .withEnableAutoReconnect(false)
                 .withRestartIntervalInMilliseconds(30000)
                 .withReconnectionCount(30)
                 .build();
+
         Client client = ClientBuilder.builder()
                         .create(RequestManagerFactory.newInstance(endpoint, token, retryOptions))
                         .withEmailOptions(emailValidationOptions)
@@ -81,7 +83,7 @@ public class Streaming {
                         .withAddressOptions(addressOptions)
                         .build();
 
-        client.onRequestFailure().subscribe(failRequestResponse -> {
+        Disposable requestFailure = client.onRequestFailure().subscribe(failRequestResponse -> {
             final String message = String.format("Error sending a request. Method name: %s; Reference Id: %s; Error message: %s",
                     failRequestResponse.getMethod().getValue(),
                     failRequestResponse.getReferenceId(),
@@ -89,7 +91,7 @@ public class Streaming {
             System.out.println(message);
         });
 
-        client.onConnectionFailure().subscribe(connectionFailResponse -> {
+        Disposable connectionFailure = client.onConnectionFailure().subscribe(connectionFailResponse -> {
             System.out.println(connectionFailResponse.getError().getValue());
             connectionFailResponse.getFailRequests().forEach(x -> {
                 final String message = String.format("Error sending a request when reconnecting to server. Method name: %s; Reference Id: %s; Error message: %s",
@@ -135,10 +137,35 @@ public class Streaming {
                     sendEnrichmentRequest(client);
                     break;
 
+                case "en geo" :
+                    sendEnrichmentGeocodesRequest(client);
+                    break;
+
+                case "en uk essential" :
+                    sendEnrichmentUkLocationEssentialRequest(client);
+                    break;
+
+                case "en usa" :
+                    sendEnrichmentUsaGeocodeRequest(client);
+                    break;
+
+                case "en aus" :
+                    sendEnrichmentAusGeocodeRequest(client);
+                    break;
+
+                case "en uklc" :
+                    sendEnrichmentUkLocationCompleteRequest(client);
+                    break;
+
                 case "p" :
                     System.out.println("Enter number to validate:");
                     String number = getInput();
-                    sendPhoneRequest(client, number);
+                    System.out.println("Enter country Iso:");
+                    String countryIso = getInput();
+                    System.out.println("Enter get ported date option (true/false):");
+                    Scanner sn = new Scanner(System.in);
+                    boolean getPortedDate = sn.nextBoolean();
+                    sendPhoneRequest(client, number, countryIso, getPortedDate);
                     break;
 
                 case "a" :
@@ -152,6 +179,8 @@ public class Streaming {
             input = getInput();
         }
 
+        requestFailure.dispose();
+        connectionFailure.dispose();
         client.stopStreaming();
         System.exit(1);
     }
@@ -218,20 +247,151 @@ public class Streaming {
                                     .build();
         try {
             client.onEnrichmentRequest(request);
-            System.out.println("Sent request!");
+            System.out.println("AUS CV Postcode request sent");
         } catch (final RateLimitException | ConnectionException ex) {
             System.out.println(ex.getMessage());
         }
     }
 
-    private static void sendPhoneRequest(Client client, String number) {
+    private static void sendEnrichmentGeocodesRequest(Client client) {
+        EnrichmentDatasetKeys datasetKeys = EnrichmentDatasetKeysBuilder.builder()
+                .withGlobalAddressKey("aWQ9RnJpYXJzIEhvdXNlLCAxNjAgQmxhY2tmcmlhcnMgUmQsIExvbmRvbiBTRTEgOEVaLCBVbml0ZWQgS2luZ2RvbX5mb3JtYXRpZD02N2NiY2RkYS0wNzlmLTQ3NmEtOWFjOC1jNDc3Mjk4MDBiYjZ-cWw9MjJ-Z2VvPTA")
+                .build();
+
+        EnrichmentDatasetAttributes attributes = EnrichmentDatasetAttributesBuilder.builder()
+                .withGeocodesList(Geocodes.LATITUDE, Geocodes.LONGITUDE, Geocodes.MATCH_LEVEL)
+                .build();
+
+        EnrichmentRequest request = RequestBuilder.builder()
+                .withEnrichmentRequest("ref")
+                .withCountry("GBR")
+                .withKeys(datasetKeys)
+                .withAttributes(attributes)
+                .build();
+        try {
+            client.onEnrichmentRequest(request);
+            System.out.println("Geocodes request sent");
+        } catch (final RateLimitException | ConnectionException ex) {
+            System.out.println(ex.getMessage());
+        }
+    }
+
+    private static void sendEnrichmentUkLocationEssentialRequest(Client client) {
+        EnrichmentDatasetKeys datasetKeys = EnrichmentDatasetKeysBuilder.builder()
+                .withGlobalAddressKey("aWQ9RXhwZXJpYW4gRGF0YSBRdWFsaXR5LCBGcmlhcnMgSG91c2UsIEJsYWNrZnJpYXJzIFJvYWQsIExvbmRvbn5hbHRfa2V5PTU1MjQ0MjU2fmZvcm1hdGlkPWE4MzQwZmQyLTBlNzQtNDc3OS05OTdjLWM2ZDAyMjM0MzdiNn5xbD02MX5nZW89MA")
+                .build();
+
+        EnrichmentDatasetAttributes attributes = EnrichmentDatasetAttributesBuilder.builder()
+                .withUkLocationEssentialList(UkLocationEssential.LATITUDE, UkLocationEssential.LONGITUDE, UkLocationEssential.MATCH_LEVEL, UkLocationEssential.UDPRN, UkLocationEssential.UPRN, UkLocationEssential.X_COORDINATE, UkLocationEssential.Y_COORDINATE)
+                .build();
+
+        EnrichmentRequest request = RequestBuilder.builder()
+                .withEnrichmentRequest("ref")
+                .withCountry("GBR")
+                .withKeys(datasetKeys)
+                .withAttributes(attributes)
+                .build();
+        try {
+            client.onEnrichmentRequest(request);
+            System.out.println("UK Location Essential request sent");
+        } catch (final RateLimitException | ConnectionException ex) {
+            System.out.println(ex.getMessage());
+        }
+    }
+
+    private static void sendEnrichmentUsaGeocodeRequest(Client client) {
+        EnrichmentDatasetKeys datasetKeys = EnrichmentDatasetKeysBuilder.builder()
+                .withGlobalAddressKey("aWQ9VXJiIExhIFBsYXRhLDEgQ2FsbGUgMSxDb21lcmlvLFBSLDAwNzgyLTI3MTd+YWx0X2tleT1VcmIgTGEgUGxhdGF8MSBDYWxsZSAxfHxDb21lcmlvLFBSLDAwNzgyLTI3MTd+Zm9ybWF0SWQ9YTM5NjU1ODctYmIyNS00NmFkLTlkNmMtY2E4MDQ4YmQ0NGY2flFMPTl+Z2VvPTA=")
+                .build();
+
+        EnrichmentDatasetAttributes attributes = EnrichmentDatasetAttributesBuilder.builder()
+                .withUsaRegionalGeocodesList(UsaRegionalGeocodes.LONGITUDE,UsaRegionalGeocodes.LATITUDE,UsaRegionalGeocodes.MATCH_LEVEL)
+                .build();
+
+        EnrichmentRequest request = RequestBuilder.builder()
+                .withEnrichmentRequest("ref")
+                .withCountry("USA")
+                .withKeys(datasetKeys)
+                .withAttributes(attributes)
+                .build();
+        try {
+            client.onEnrichmentRequest(request);
+            System.out.println("USA Regional Geocodes request sent");
+        } catch (final RateLimitException | ConnectionException ex) {
+            System.out.println(ex.getMessage());
+        }
+    }
+
+    private static void sendEnrichmentAusGeocodeRequest(Client client) {
+        EnrichmentDatasetKeys datasetKeys = EnrichmentDatasetKeysBuilder.builder()
+                .withGlobalAddressKey("aWQ9OCBDb2NocmFuZSBTdHJlZXQsIFdFU1QgS0VNUFNFWSAgTlNXIDI0NDB-YWx0X2tleT0zMTE3NjQ5MH5kYXRhc2V0PUFVU19QQUZ-Zm9ybWF0aWQ9NGFlNTMyZDQtNjUwNC00Yzg2LThjZmQtYTBmZmNhNGRhN2Y0fnFsPTUzfmdlbz0w")
+                .build();
+
+        EnrichmentDatasetAttributes attributes = EnrichmentDatasetAttributesBuilder.builder()
+                .withAusRegionalGeocodesList(
+                        AusRegionalGeocodes.LONGITUDE,
+                        AusRegionalGeocodes.LATITUDE,
+                        AusRegionalGeocodes.MATCH_LEVEL,
+                        AusRegionalGeocodes.MESHBLOCK,
+                        AusRegionalGeocodes.SA1,
+                        AusRegionalGeocodes.LGA_CODE,
+                        AusRegionalGeocodes.LGA_NAME)
+                .build();
+
+        EnrichmentRequest request = RequestBuilder.builder()
+                .withEnrichmentRequest("ref")
+                .withCountry("AUS")
+                .withKeys(datasetKeys)
+                .withAttributes(attributes)
+                .build();
+        try {
+            client.onEnrichmentRequest(request);
+            System.out.println("AUS Regional Geocodes request sent");
+        } catch (final RateLimitException | ConnectionException ex) {
+            System.out.println(ex.getMessage());
+        }
+    }
+
+    private static void sendPhoneRequest(Client client, String number,String countryIso, boolean getPortedDate) {
         PhoneValidationRequest request = RequestBuilder.builder()
                 .withPhoneRequest("ref")
                 .withNumber(number)
+                .withCountryIso(countryIso)
+                .withGetPortedDate(getPortedDate)
                 .build();
         try {
             client.onPhoneRequest(request);
             System.out.println(String.format("Sent request: %s", number));
+        } catch (final RateLimitException | ConnectionException ex) {
+            System.out.println(ex.getMessage());
+        }
+    }
+
+    private static void sendEnrichmentUkLocationCompleteRequest(Client client) {
+        EnrichmentDatasetKeys datasetKeys = EnrichmentDatasetKeysBuilder.builder()
+                .withGlobalAddressKey("aWQ9Q29tbXVuaXR5IEhlYWx0aCBTZXJ2aWNlcywgTHVraXMgSG91c2UsIEdyYW5nZSBSb2FkLCBTdC4gUGV0ZXIgUG9ydCwgR3Vlcm5zZXksIEdZMSAuLi4sIFVuaXRlZCBLaW5nZG9tfmFsdF9rZXk9NTA4Mzk5MjN-ZGF0YXNldD1HQlJfUEFGfmZvcm1hdGlkPWFkY2QxZjNkLWVhOGEtNDI3Yy1hYzE2LTMyNzVjYTExN2FkMn5xbD0yN35nZW89M")
+                .build();
+
+        EnrichmentDatasetAttributes attributes = EnrichmentDatasetAttributesBuilder.builder()
+                .withUkLocationCompleteList(
+                        UkLocationComplete.LONGITUDE,
+                        UkLocationComplete.LATITUDE,
+                        UkLocationComplete.MATCH_LEVEL,
+                        UkLocationComplete.X_COORDINATE,
+                        UkLocationComplete.Y_COORDINATE,
+                        UkLocationComplete.UDPRN,
+                        UkLocationComplete.UPRN)
+                .build();
+
+        EnrichmentRequest request = RequestBuilder.builder()
+                .withEnrichmentRequest("ref")
+                .withCountry("GBR")
+                .withKeys(datasetKeys)
+                .withAttributes(attributes)
+                .build();
+        try {
+            client.onEnrichmentRequest(request);
+            System.out.println("UK Location Complete request sent");
         } catch (final RateLimitException | ConnectionException ex) {
             System.out.println(ex.getMessage());
         }
@@ -274,6 +434,12 @@ public class Streaming {
             EnrichmentResult result = response.getResult();
             if (result != null) {
                 String json = gson.toJson(result);
+                System.out.println(json);
+            }
+            EnrichmentMetadata metadata = response.getMetadata();
+            if (metadata != null)
+            {
+                String json = gson.toJson(metadata);
                 System.out.println(json);
             }
         } catch (StreamingException e) {
@@ -323,6 +489,11 @@ public class Streaming {
         System.out.println("Press e to send email validation request.");
         System.out.println("Press eb to send bulk email validation request.");
         System.out.println("Press en to send enrichment request.");
+        System.out.println("Press 'en geo' to send enrichment Geocodes request.");
+        System.out.println("Press 'en uk essential' to send enrichment UK Location Essential request.");
+        System.out.println("Press 'en usa' to send enrichment USA Regional Geocodes request.");
+        System.out.println("Press 'en aus' to send enrichment AUS Regional Geocodes request.");
+        System.out.println("Press 'en uklc' to send enrichment UK Location Complete request.");
         System.out.println("Press p to send phone validation request.");
         System.out.println("Press q to quit");
     }
@@ -346,4 +517,3 @@ public class Streaming {
         return Arrays.asList(inputList);
     }
 }
-

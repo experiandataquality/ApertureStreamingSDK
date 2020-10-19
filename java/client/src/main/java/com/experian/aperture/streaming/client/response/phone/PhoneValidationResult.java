@@ -40,6 +40,12 @@ public final class PhoneValidationResult implements Result {
     @SerializedName("confidence")
     private String confidence;
 
+    /**
+     * The portability date of the validation. Examples: 2012-06-27T09:32:09.000Z.
+     **/
+    @SerializedName("ported_date")
+    private String portedDate;
+
     public String getNumber() {
         return this.number;
     }
@@ -78,5 +84,13 @@ public final class PhoneValidationResult implements Result {
 
     public void setConfidence(final String confidence) {
         this.confidence = confidence;
+    }
+
+    public String getPortedDate() {
+        return this.portedDate;
+    }
+
+    public void setPortedDate(final String portedDate) {
+        this.portedDate = portedDate;
     }
 }

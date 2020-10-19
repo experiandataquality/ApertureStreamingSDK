@@ -29,7 +29,32 @@ public final class EnrichmentResult implements Result {
      * The Geocodes data.
      **/
     @SerializedName("geocodes")
-    private EnrichmentDatasetGeocode geocodes;
+    private EnrichmentDatasetGeocodes geocodes;
+
+    /**
+     * The USA Regional Geocodes data.
+     **/
+    @SerializedName("usa_regional_geocodes")
+    private EnrichmentDatasetUsaRegionalGeocodes usaRegionalGeocodes;
+
+    /**
+     * The AUS Regional Geocodes data.
+     **/
+    @SerializedName("aus_regional_geocodes")
+    private EnrichmentDatasetAusRegionalGeocodes ausRegionalGeocodes;
+
+    /**
+     * The UK Location Essential data.
+     **/
+    @SerializedName("uk_location_essential")
+    private EnrichmentDatasetUkLocationEssential ukLocationEssential;
+
+    /**
+     * The Uk Location Complete data.
+     **/
+    @SerializedName("uk_location_complete")
+    private EnrichmentDatasetUkLocationComplete ukLocationComplete;
+
 
     /**
      * Gets the ausCvHousehold.
@@ -83,7 +108,7 @@ public final class EnrichmentResult implements Result {
      * Gets the geocodes.
      * @return The geocodes.
      */
-    public EnrichmentDatasetGeocode getGeocodes() {
+    public EnrichmentDatasetGeocodes getGeocodes() {
         return this.geocodes;
     }
 
@@ -91,7 +116,71 @@ public final class EnrichmentResult implements Result {
      * Sets the geocodes.
      * @param geocodes The geocodes.
      */
-    public void setGeocodes(final EnrichmentDatasetGeocode geocodes) {
+    public void setGeocodes(final EnrichmentDatasetGeocodes geocodes) {
         this.geocodes = geocodes;
+    }
+
+    /**
+     * Gets the USA regional geocodes.
+     * @return The USA regional geocodes.
+     */
+    public EnrichmentDatasetUsaRegionalGeocodes getUsaRegionalGeocodes() {
+        return this.usaRegionalGeocodes;
+    }
+
+    /**
+     * Sets the USA regional geocodes.
+     * @param usaRegionalGeocodes USA regional geocodes.
+     */
+    public void setUsaRegionalGeocodes(final EnrichmentDatasetUsaRegionalGeocodes usaRegionalGeocodes) {
+        this.usaRegionalGeocodes = usaRegionalGeocodes;
+    }
+
+    /**
+     * Gets the AUS regional geocodes.
+     * @return The AUS regional geocodes.
+     */
+    public EnrichmentDatasetAusRegionalGeocodes getAusRegionalGeocodes() {
+        return this.ausRegionalGeocodes;
+    }
+
+    /**
+     * Sets the AUS regional geocodes.
+     * @param ausRegionalGeocodes AUS regional geocodes.
+     */
+    public void setAusRegionalGeocodes(final EnrichmentDatasetAusRegionalGeocodes ausRegionalGeocodes) {
+        this.ausRegionalGeocodes = ausRegionalGeocodes;
+    }
+
+    /**
+     * Gets the UK Location Essential.
+     * @return The UK Location Essential.
+     */
+    public EnrichmentDatasetUkLocationEssential getUkLocationEssential() {
+        return this.ukLocationEssential;
+    }
+
+    /**
+     * Sets the UK Location Essential.
+     * @param ukLocationEssential UK Location Essential.
+     */
+    public void setUkLocationEssential(final EnrichmentDatasetUkLocationEssential ukLocationEssential) {
+        this.ukLocationEssential = ukLocationEssential;
+    }
+
+    /**
+     * Gets the Uk Location Complete.
+     * @return The Uk Location Complete.
+     */
+    public EnrichmentDatasetUkLocationComplete getUkLocationComplete() {
+        return this.ukLocationComplete;
+    }
+
+    /**
+     * Sets the Uk Location Complete.
+     * @param ukLocationComplete Uk Location Complete.
+     */
+    public void setUkLocationComplete(final EnrichmentDatasetUkLocationComplete ukLocationComplete) {
+        this.ukLocationComplete = ukLocationComplete;
     }
 }

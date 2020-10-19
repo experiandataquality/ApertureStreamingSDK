@@ -11,6 +11,8 @@ public final class DefaultPhoneValidationRequestBuilder implements RequestBuilde
     private final int defaultCacheValueDays = 7;
     private String number;
     private String referenceId;
+    private String countryIso;
+    private boolean getPortedDate;
     private String outputFormat = defaultOutputFormat;
     private int cacheValueDays = defaultCacheValueDays;
     private final String message = ResourceReader.getErrorMessageWithKey("ReferenceIdAlphanumericError");
@@ -44,7 +46,19 @@ public final class DefaultPhoneValidationRequestBuilder implements RequestBuilde
     }
 
     @Override
+    public RequestBuilder.PhoneValidationRequestBuilder withCountryIso(final String countryIso) {
+        this.countryIso = countryIso;
+        return this;
+    }
+
+    @Override
+    public RequestBuilder.PhoneValidationRequestBuilder withGetPortedDate(final boolean getPortedDate) {
+        this.getPortedDate = getPortedDate;
+        return this;
+    }
+
+    @Override
     public PhoneValidationRequest build() {
-        return new PhoneValidationRequest(this.referenceId, this.number, this.outputFormat, this.cacheValueDays);
+        return new PhoneValidationRequest(this.referenceId, this.number, this.outputFormat, this.cacheValueDays, this.countryIso, this.getPortedDate);
     }
 }

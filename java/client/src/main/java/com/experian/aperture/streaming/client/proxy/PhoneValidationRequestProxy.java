@@ -31,12 +31,26 @@ public final class PhoneValidationRequestProxy extends RequestProxyBase {
     @SerializedName("timeout")
     private long timeout;
 
+    /**
+     * The 3-letter ISO country code.
+     **/
+    @SerializedName("country_iso")
+    private String countryIso;
+
+    /**
+     * Boolean value get ported date.
+     */
+    @SerializedName("get_ported_date")
+    private boolean getPortedDate;
+
     public PhoneValidationRequestProxy(final PhoneValidationRequest request, final PhoneValidationOptions options) {
         super(Versions.PHONE_VALIDATION_REQUEST, request.getReferenceId(), options.getAddMetadata());
         this.number = request.getNumber();
         this.outputFormat = request.getOutputFormat();
         this.cacheValueDays = request.getCacheValueDays();
+        this.countryIso = request.getCountryIso();
         this.timeout = options.getTimeout().getSeconds();
+        this.getPortedDate = request.getGetPortedDate();
     }
 
     public String getNumber() {
@@ -53,5 +67,13 @@ public final class PhoneValidationRequestProxy extends RequestProxyBase {
 
     public long getTimeout() {
         return this.timeout;
+    }
+
+    public String getCountryIso() {
+        return this.countryIso;
+    }
+
+    public boolean getGetPortedDate() {
+        return this.getPortedDate;
     }
 }

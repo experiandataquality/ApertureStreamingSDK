@@ -87,18 +87,24 @@ final class RequestBuilderTestsSteps {
      * @param ausCvHouseholdList The AUS CV household list.
      * @param ausCVPostcodeList The AUS CV postcode list.
      * @param ausCVPersonList The AUS CV people.
-     * @param geocodeList The geocode list.
+     * @param geocodesList The geocodes list.
+     * @param usaRegionalGeocodesList The USA regional geocodes list.
+     * @param ukLocationEssentialList The UK Location Essential list.
      * @return The steps.
      */
     RequestBuilderTestsSteps whenIBuildEnrichmentDatasetAttributes(final List<AusCVHousehold> ausCvHouseholdList,
                                                                    final List<AusCVPostcode> ausCVPostcodeList,
                                                                    final List<AusCVPerson> ausCVPersonList,
-                                                                   final List<Geocode> geocodeList) {
+                                                                   final List<Geocodes> geocodesList,
+                                                                   final List<UsaRegionalGeocodes> usaRegionalGeocodesList,
+                                                                   final List<UkLocationEssential> ukLocationEssentialList) {
         this.attributes = EnrichmentDatasetAttributesBuilder.builder()
                 .withAusCvHouseholdList(ausCvHouseholdList.toArray(new AusCVHousehold[ausCvHouseholdList.size()]))
                 .withAusCvPostcodeList(ausCVPostcodeList.toArray(new AusCVPostcode[ausCVPostcodeList.size()]))
                 .withAusCvPersonList(ausCVPersonList.toArray(new AusCVPerson[ausCVPersonList.size()]))
-                .withGeocodeList(geocodeList.toArray(new Geocode[geocodeList.size()]))
+                .withGeocodesList(geocodesList.toArray(new Geocodes[geocodesList.size()]))
+                .withUsaRegionalGeocodesList(usaRegionalGeocodesList.toArray(new UsaRegionalGeocodes[usaRegionalGeocodesList.size()]))
+                .withUkLocationEssentialList(ukLocationEssentialList.toArray(new UkLocationEssential[ukLocationEssentialList.size()]))
                 .build();
         return this;
     }
@@ -192,18 +198,24 @@ final class RequestBuilderTestsSteps {
      * @param ausCvHouseholdList The expected AUS CV household list.
      * @param ausCVPostcodeList The expected AUS CV postcode list.
      * @param ausCVPersonList The expected AUS CV people.
-     * @param geocodeList The expected geocode list.
+     * @param geocodesList The expected geocodes list.
+     * @param usaRegionalGeocodesList The expected USA regional geocodes list.
+     * @param ukLocationEssentialList The expected UK Location Essential list.
      * @return The steps.
      */
     RequestBuilderTestsSteps thenEnrichmentDatasetAttributesShouldHave(final List<AusCVHousehold> ausCvHouseholdList,
                                                                        final List<AusCVPostcode> ausCVPostcodeList,
                                                                        final List<AusCVPerson> ausCVPersonList,
-                                                                       final List<Geocode> geocodeList) {
+                                                                       final List<Geocodes> geocodesList,
+                                                                       final List<UsaRegionalGeocodes> usaRegionalGeocodesList,
+                                                                       final List<UkLocationEssential> ukLocationEssentialList) {
         assertNotNull(this.attributes);
         assertArrayEquals(this.attributes.getAusCvHousehold().toArray(), ausCvHouseholdList.toArray());
         assertArrayEquals(this.attributes.getAusCvPostcode().toArray(), ausCVPostcodeList.toArray());
         assertArrayEquals(this.attributes.getAusCvPerson().toArray(), ausCVPersonList.toArray());
-        assertArrayEquals(this.attributes.getGeocodes().toArray(), geocodeList.toArray());
+        assertArrayEquals(this.attributes.getGeocodes().toArray(), geocodesList.toArray());
+        assertArrayEquals(this.attributes.getUsaRegionalGeocodes().toArray(), usaRegionalGeocodesList.toArray());
+        assertArrayEquals(this.attributes.getUkLocationEssential().toArray(), ukLocationEssentialList.toArray());
         return this;
     }
 
@@ -230,12 +242,12 @@ final class RequestBuilderTestsSteps {
         assertThat(this.addressValidationRequest.getReferenceId(), is(expectedDto.getReferenceId()));
         assertThat(this.addressValidationRequest.getCountryIso(), is(expectedDto.getCountryIso()));
         assertThat(this.addressValidationRequest.getDataset(), is(expectedDto.getDataset()));
-        assertTrue(this.addressValidationRequest.getDeliveryService().stream().allMatch(x -> expectedDto.getDeliveryServices().contains(x)));
-        assertTrue(this.addressValidationRequest.getOrganization().stream().allMatch(x -> expectedDto.getOrganizations().contains(x)));
-        assertTrue(this.addressValidationRequest.getSubBuilding().stream().allMatch(x -> expectedDto.getSubBuildings().contains(x)));
-        assertTrue(this.addressValidationRequest.getBuilding().stream().allMatch(x -> expectedDto.getBuildings().contains(x)));
-        assertTrue(this.addressValidationRequest.getStreet().stream().allMatch(x -> expectedDto.getStreets().contains(x)));
-        assertTrue(this.addressValidationRequest.getLocality().stream().allMatch(x -> expectedDto.getLocalities().contains(x)));
+        assertTrue(this.addressValidationRequest.getDeliveryService().containsAll(expectedDto.getDeliveryServices()));
+        assertTrue(this.addressValidationRequest.getOrganization().containsAll(expectedDto.getOrganizations()));
+        assertTrue(this.addressValidationRequest.getSubBuilding().containsAll(expectedDto.getSubBuildings()));
+        assertTrue(this.addressValidationRequest.getBuilding().containsAll(expectedDto.getBuildings()));
+        assertTrue(this.addressValidationRequest.getStreet().containsAll(expectedDto.getStreets()));
+        assertTrue(this.addressValidationRequest.getLocality().containsAll(expectedDto.getLocalities()));
         assertThat(this.addressValidationRequest.getPostalCode(), is(expectedDto.getPostalCode()));
         return this;
     }

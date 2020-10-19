@@ -25,12 +25,24 @@ public final class PhoneValidationRequest extends RequestBase {
      */
     private int cacheValueDays;
 
-    PhoneValidationRequest(final String referenceId, final String number, final String outputFormat, final int cacheValueDays) {
+    /**
+     3-letter ISO country code.
+     */
+    private String countryIso;
+
+    /**
+     * Boolean value for get ported date.
+     */
+    private boolean getPortedDate;
+
+    PhoneValidationRequest(final String referenceId, final String number, final String outputFormat, final int cacheValueDays, final String countryIso, final boolean getPortedDate) {
         super(referenceId);
         Contract.requiresNotEmpty(number, ResourceReader.getErrorMessageWithKey("PhoneNumberRequired"));
         this.number = number;
         this.outputFormat = outputFormat;
         this.cacheValueDays = cacheValueDays;
+        this.countryIso = countryIso;
+        this.getPortedDate = getPortedDate;
     }
 
     /**
@@ -56,5 +68,20 @@ public final class PhoneValidationRequest extends RequestBase {
     public int getCacheValueDays() {
         return cacheValueDays;
     }
-}
 
+    /**
+     * Gets the country Iso.
+     * @return The country Iso.
+     */
+    public String getCountryIso() {
+        return this.countryIso;
+    }
+
+    /**
+     * Gets the get ported date.
+     * @return The get ported date.
+     */
+    public boolean getGetPortedDate() {
+        return  this.getPortedDate;
+    }
+}

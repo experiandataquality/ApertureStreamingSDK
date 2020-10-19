@@ -109,6 +109,20 @@ public interface OptionsBuilder {
         PhoneValidationOptionsBuilder withTimeout(Duration timeout);
 
         /**
+         * Specifies the country ISO for validation purpose. This is an optional field.
+         * @param countryIso 3-letter ISO country code.
+         * @return the 3 letter country ISO.
+         */
+        PhoneValidationOptionsBuilder withCountryIso(String countryIso);
+
+        /**
+         * Specifies the getPortedDate for validation purpose.
+         * @param getPortedDate boolean value.
+         * @return boolean value.
+         */
+        PhoneValidationOptionsBuilder withGetPortedDate(boolean getPortedDate);
+
+        /**
          * Builds the options when sending streaming request with the defined values.
          * @return The phone validation options.
          */
