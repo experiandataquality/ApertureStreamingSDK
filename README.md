@@ -99,7 +99,7 @@ Below are the errors raised when there is a failure in processing the request.
 
 * 500 (Internal Server Error) An unhandled error has occurred. 
 
-Below is the sample piece of code showing how to subscribe to `onRequestFailure` event. `FailRequestResponse` object will have the error cause and, the referenceId of the failed request. 
+Below is the sample piece of code showing how to subscribe to `onRequestFailure` event. `FailRequestResponse` object will have the error cause and the referenceId of the failed request. 
 
 ##### Sample Code
     client.onRequestFailure().subscribe(failRequestResponse -> {
