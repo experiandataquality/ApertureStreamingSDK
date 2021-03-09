@@ -41,7 +41,7 @@ Make sure the application/client have the following installed:
 
 ## Project Setup
 
-In order to set up the project in IntelliJ, select `File > New > Project from Version Control... > Git`. Copy the git HTTPS URL into the `Clone Repository` field in Intellij. After the repository has been cloned, IntelliJ will show an "Gradle projects need to be imported" message. Click Import changes.
+In order to set up the project in IntelliJ, select `File > New > Project from Version Control... > Git`. Copy the git HTTPS URL into the `Clone Repository` field in Intellij. After the repository has been cloned, IntelliJ will show a "Gradle projects need to be imported" message. Click Import changes.
 
 ## Integration
 
@@ -49,7 +49,7 @@ This project has the sample code that shows how to integrate Aperture Streaming 
 
 ### Request Validation
 
-Aperture Streaming SDK validates every request that comes in. If the any of the request parameters value is `Empty/Null`, it throws `IllegalArgumentException`. However for `referenceId` parameter, Aperture Streaming SDK has extra validation where it should not be `WhiteSpace/NonAlphaNumeric`
+Aperture Streaming SDK validates every request that comes in. If the any of the request parameters value is `Empty/Null`, it throws `IllegalArgumentException`. However, for `referenceId` parameter, Aperture Streaming SDK has extra validation where it should not be `WhiteSpace/NonAlphaNumeric`
 
 ### Options Configuration
 
@@ -83,7 +83,7 @@ Below are the exceptions raised from Aperture Streaming SDK. Consumers of SDK ar
 
 * ConnectionException - Raise this exception with message as below
  
-    * Your connection disconnected. Please restart the job from latest item successfully submitted.
+    * Your connection disconnected. Please restart the job from the latest item successfully submitted.
     
     * 404 (Not Found) Failed to establish the connection. This URL is not valid. Please check you have entered a valid Hub URL.
 
@@ -99,7 +99,7 @@ Below are the errors raised when there is a failure in processing the request.
 
 * 500 (Internal Server Error) An unhandled error has occurred. 
 
-Below is the sample piece of code showing how to subscribe to `onRequestFailure` event. `FailRequestResponse` object will have the error cause and the referenceId of the failed request. 
+Below is the sample piece of code showing how to subscribe to `onRequestFailure` event. `FailRequestResponse` object will have the error cause and, the referenceId of the failed request. 
 
 ##### Sample Code
     client.onRequestFailure().subscribe(failRequestResponse -> {
@@ -140,7 +140,7 @@ During request processing, if any disconnection happens to Aperture streaming, t
 
 * ReconnectCount - The count of retry connection to Aperture Streaming. The value should be greater than or equal to 1.
 
-* RestartIntervalMilliSeconds - The interval to restart connection to Aperture Streaming. The value should be should be greater than or equal to 1.
+* RestartIntervalMilliSeconds - The interval to restart connection to Aperture Streaming. The value should be greater than or equal to 1.
 
 If consumer of Aperture Streaming SDK does not specify the configuration, below are the default values. 
         
@@ -150,19 +150,19 @@ If consumer of Aperture Streaming SDK does not specify the configuration, below 
         
 If the connection to Aperture Streaming is not established after retry, Aperture Streaming SDK throws below error under [onConnectionFailure](#sample-code-1) event.
 
-   * Failed to re-establish the connection. Please restart the job from latest item successfully submitted.    
+   * Failed to re-establish the connection. Please restart the job from the latest item successfully submitted.    
 
 ## Build
 
 running `gradle build` from terminal or Intellij will trigger the build for all sub-projects.
 
-![Gradle build](docs/gradle-build.png)
+![Gradle build](docs/gradle-build.PNG)
 
 Each project will generate their respective build binary inside `<module-name>/build/libs/` folder. 
 
-![Build result](docs/build-result.png)
+![Build result](docs/build-result.PNG)
 
-The version of the build will be generated based on the value of semantiVersion defined in gradle.properties.
+The version of the build will be generated based on the value of semanticVersion defined in gradle.properties.
 
 ### Checkstyle
 
@@ -173,18 +173,18 @@ Checkstyle will be run on every `gradle build`. Any checkstyle **ERROR**-level v
 
 ## Test 
 
-`gradle build` will implicitly trigger all of JUnit test classes in all of the sub-projects. Any failing test will fail the build.
+`gradle build` will implicitly trigger all of JUnit test classes in all the sub-projects. Any failing test will fail the build.
 
 Run `gradle test` to trigger only the JUnit test classes.
 
-![Gradle test](docs/gradle-test.png)
+![Gradle test](docs/gradle-test.PNG)
   
 ### Generating Test Report
 
 We are utilizing Jacoco to generate code coverage report. Run `gradle jacocoFullReport` to generate and consolidate test coverage for all subprojects.
 
-![Jacoco Full Report](docs/gradle-jacoco-full-report.png)
+![Jacoco Full Report](docs/gradle-jacoco-full-report.PNG)
 
 The report will be generated on the root project's `build` folder:
 
-![Jacoco Full Report Location](docs/jacoco-full-report-location.png)
+![Jacoco Full Report Location](docs/jacoco-full-report-location.PNG)

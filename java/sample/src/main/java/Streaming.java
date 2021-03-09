@@ -157,6 +157,14 @@ public class Streaming {
                     sendEnrichmentUkLocationCompleteRequest(client);
                     break;
 
+                case "en nzl regional geocodes" :
+                    sendEnrichmentNzlRegionalGeocodesRequest(client);
+                    break;
+
+                case "en nzl cv household" :
+                    sendEnrichmentNzlCVHouseholdRequest(client);
+                    break;
+
                 case "p" :
                     System.out.println("Enter number to validate:");
                     String number = getInput();
@@ -235,7 +243,7 @@ public class Streaming {
                 .build();
 
         EnrichmentDatasetAttributes attributes = EnrichmentDatasetAttributesBuilder.builder()
-                .withAusCvPostcodeList(AusCVPostcode.HOUSEHOLD_COMPOSITION_CODE, AusCVPostcode.HOUSEHOLD_COMPOSITION_DESCRIPTION,
+                .withAusCVPostcodeList(AusCVPostcode.HOUSEHOLD_COMPOSITION_CODE, AusCVPostcode.HOUSEHOLD_COMPOSITION_DESCRIPTION,
                                        AusCVPostcode.LENGTH_OF_RESIDENCE_CODE, AusCVPostcode.LENGTH_OF_RESIDENCE_DESCRIPTION)
                 .build();
 
@@ -397,6 +405,85 @@ public class Streaming {
         }
     }
 
+    private static void sendEnrichmentNzlRegionalGeocodesRequest(Client client) {
+        EnrichmentDatasetKeys datasetKeys = EnrichmentDatasetKeysBuilder.builder()
+                .withGlobalAddressKey("aWQ9Q29tbXVuaXR5IEhlYWx0aCBTZXJ2aWNlcywgTHVraXMgSG91c2UsIEdyYW5nZSBSb2FkLCBTdC4gUGV0ZXIgUG9ydCwgR3Vlcm5zZXksIEdZMSAuLi4sIFVuaXRlZCBLaW5nZG9tfmFsdF9rZXk9NTA4Mzk5MjN-ZGF0YXNldD1HQlJfUEFGfmZvcm1hdGlkPWFkY2QxZjNkLWVhOGEtNDI3Yy1hYzE2LTMyNzVjYTExN2FkMn5xbD0yN35nZW89M")
+                .build();
+
+        EnrichmentDatasetAttributes attributes = EnrichmentDatasetAttributesBuilder.builder()
+                .withNzlRegionalGeocodesList(
+                        NzlRegionalGeocodes.REGIONAL_COUNCIL_CODE,
+                        NzlRegionalGeocodes.REGIONAL_COUNCIL_NAME,
+                        NzlRegionalGeocodes.ADDRESSABLE,
+                        NzlRegionalGeocodes.CENTROID_OF_PROPERTY_NZTM_X_COORDINATE,
+                        NzlRegionalGeocodes.CENTROID_OF_PROPERTY_NZTM_Y_COORDINATE,
+                        NzlRegionalGeocodes.FRONT_OF_PROPERTY_NZTM_X_COORDINATE,
+                        NzlRegionalGeocodes.FRONT_OF_PROPERTY_NZTM_Y_COORDINATE,
+                        NzlRegionalGeocodes.GENERAL_ELECTORATE_CODE,
+                        NzlRegionalGeocodes.GENERAL_ELECTORATE_NAME,
+                        NzlRegionalGeocodes.REGIONAL_COUNCIL_NAME,
+                        NzlRegionalGeocodes.REGIONAL_COUNCIL_CODE,
+                        NzlRegionalGeocodes.LINZ_PARCEL_ID,
+                        NzlRegionalGeocodes.MAORI_ELECTORATE_CODE,
+                        NzlRegionalGeocodes.MAORI_ELECTORATE_NAME,
+                        NzlRegionalGeocodes.MESH_BLOCK_CODE,
+                        NzlRegionalGeocodes.PROPERTY_PURPOSE_TYPE,
+                        NzlRegionalGeocodes.TERRITORIAL_AUTHORITY_CODE,
+                        NzlRegionalGeocodes.TERRITORIAL_AUTHORITY_NAME,
+                        NzlRegionalGeocodes.FRONT_OF_PROPERTY_LATITUDE,
+                        NzlRegionalGeocodes.FRONT_OF_PROPERTY_LONGITUDE,
+                        NzlRegionalGeocodes.CENTROID_OF_PROPERTY_LATITUDE,
+                        NzlRegionalGeocodes.CENTROID_OF_PROPERTY_LONGITUDE,
+                        NzlRegionalGeocodes.MATCH_LEVEL
+                )
+                .build();
+
+        EnrichmentRequest request = RequestBuilder.builder()
+                .withEnrichmentRequest("ref")
+                .withCountry("NZL")
+                .withKeys(datasetKeys)
+                .withAttributes(attributes)
+                .build();
+        try {
+            client.onEnrichmentRequest(request);
+            System.out.println("NZL Regional Geocodes request sent");
+        } catch (final RateLimitException | ConnectionException ex) {
+            System.out.println(ex.getMessage());
+        }
+    }
+
+    private static void sendEnrichmentNzlCVHouseholdRequest(Client client) {
+        EnrichmentDatasetKeys datasetKeys = EnrichmentDatasetKeysBuilder.builder()
+                .withGlobalAddressKey("aWQ9Q29tbXVuaXR5IEhlYWx0aCBTZXJ2aWNlcywgTHVraXMgSG91c2UsIEdyYW5nZSBSb2FkLCBTdC4gUGV0ZXIgUG9ydCwgR3Vlcm5zZXksIEdZMSAuLi4sIFVuaXRlZCBLaW5nZG9tfmFsdF9rZXk9NTA4Mzk5MjN-ZGF0YXNldD1HQlJfUEFGfmZvcm1hdGlkPWFkY2QxZjNkLWVhOGEtNDI3Yy1hYzE2LTMyNzVjYTExN2FkMn5xbD0yN35nZW89M")
+                .build();
+
+        EnrichmentDatasetAttributes attributes = EnrichmentDatasetAttributesBuilder.builder()
+                .withNzlCVHouseholdList(
+                        NzlCVHousehold.Adults_At_Address,
+                        NzlCVHousehold.Children_At_Address,
+                        NzlCVHousehold.Head_Of_Household_Age,
+                        NzlCVHousehold.Household_Composition,
+                        NzlCVHousehold.Head_Of_Household_Lifestage,
+                        NzlCVHousehold.Mosaic_Group,
+                        NzlCVHousehold.Mosaic_Segment,
+                        NzlCVHousehold.Mosaic_Type_Group
+                )
+                .build();
+
+        EnrichmentRequest request = RequestBuilder.builder()
+                .withEnrichmentRequest("ref")
+                .withCountry("NZL")
+                .withKeys(datasetKeys)
+                .withAttributes(attributes)
+                .build();
+        try {
+            client.onEnrichmentRequest(request);
+            System.out.println("NZL Consumer View request sent");
+        } catch (final RateLimitException | ConnectionException ex) {
+            System.out.println(ex.getMessage());
+        }
+    }
+
     private static void sendAddressRequest(Client client) {
         AddressValidationRequest request = RequestBuilder.builder()
                 .withAddressValidationRequest("ref")
@@ -494,6 +581,8 @@ public class Streaming {
         System.out.println("Press 'en usa' to send enrichment USA Regional Geocodes request.");
         System.out.println("Press 'en aus' to send enrichment AUS Regional Geocodes request.");
         System.out.println("Press 'en uklc' to send enrichment UK Location Complete request.");
+        System.out.println("Press 'en nzl cv household' to send enrichment NZL CV Household request.");
+        System.out.println("Press 'en nzl regional geocodes' to send enrichment NZL Regional Geocodes request.");
         System.out.println("Press p to send phone validation request.");
         System.out.println("Press q to quit");
     }

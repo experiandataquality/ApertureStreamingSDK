@@ -221,10 +221,12 @@ public class RequestBuilderTests {
         final List<Geocodes> geocodesList = Arrays.asList(Geocodes.LATITUDE, Geocodes.LONGITUDE);
         final List<UsaRegionalGeocodes> usaRegionalGeocodesList = Arrays.asList(UsaRegionalGeocodes.LATITUDE, UsaRegionalGeocodes.LONGITUDE);
         final List<UkLocationEssential> ukLocationEssentialList = Arrays.asList(UkLocationEssential.LATITUDE, UkLocationEssential.LONGITUDE, UkLocationEssential.UDPRN);
+        final List<NzlRegionalGeocodes> nzlRegionalGeocodes = Arrays.asList(NzlRegionalGeocodes.LINZ_PARCEL_ID, NzlRegionalGeocodes.ADDRESSABLE, NzlRegionalGeocodes.GENERAL_ELECTORATE_CODE);
+        final List<NzlCVHousehold> nzlCVHouseholdList = Arrays.asList(NzlCVHousehold.Adults_At_Address, NzlCVHousehold.Children_At_Address);
         this.steps
                 .givenISetupRequestBuilder()
-                .whenIBuildEnrichmentDatasetAttributes(ausCvHouseholdList, ausCVPostcodeList, ausCVPersonList, geocodesList, usaRegionalGeocodesList, ukLocationEssentialList)
-                .thenEnrichmentDatasetAttributesShouldHave(ausCvHouseholdList, ausCVPostcodeList, ausCVPersonList, geocodesList, usaRegionalGeocodesList, ukLocationEssentialList);
+                .whenIBuildEnrichmentDatasetAttributes(ausCvHouseholdList, ausCVPostcodeList, ausCVPersonList, geocodesList, usaRegionalGeocodesList, ukLocationEssentialList, nzlRegionalGeocodes, nzlCVHouseholdList)
+                .thenEnrichmentDatasetAttributesShouldHave(ausCvHouseholdList, ausCVPostcodeList, ausCVPersonList, geocodesList, usaRegionalGeocodesList, ukLocationEssentialList, nzlRegionalGeocodes, nzlCVHouseholdList);
     }
 
     /**
@@ -239,7 +241,7 @@ public class RequestBuilderTests {
         this.steps
                 .givenISetupRequestBuilder()
                 .whenIBuildEnrichmentDatasetKeys(dto)
-                .whenIBuildEnrichmentDatasetAttributes(Collections.emptyList(), Collections.emptyList(), Collections.emptyList(), geocodesList, Collections.emptyList(), Collections.emptyList())
+                .whenIBuildEnrichmentDatasetAttributes(Collections.emptyList(), Collections.emptyList(), Collections.emptyList(), geocodesList, Collections.emptyList(), Collections.emptyList(), Collections.emptyList(), Collections.emptyList())
                 .whenIBuildEnrichmentRequest(referenceId, "country")
                 .thenEnrichmentRequestShouldHave("country", referenceId);
     }
@@ -258,7 +260,7 @@ public class RequestBuilderTests {
         this.steps
                 .givenISetupRequestBuilder()
                 .whenIBuildEnrichmentDatasetKeys(dto)
-                .whenIBuildEnrichmentDatasetAttributes(Collections.emptyList(), Collections.emptyList(), Collections.emptyList(), geocodesList, Collections.emptyList(), Collections.emptyList())
+                .whenIBuildEnrichmentDatasetAttributes(Collections.emptyList(), Collections.emptyList(), Collections.emptyList(), geocodesList, Collections.emptyList(), Collections.emptyList(), Collections.emptyList(), Collections.emptyList())
                 .whenIBuildEnrichmentRequest(referenceId, "country")
                 .thenEnrichmentRequestShouldHave("country", referenceId);
     }
@@ -277,7 +279,7 @@ public class RequestBuilderTests {
         this.steps
                 .givenISetupRequestBuilder()
                 .whenIBuildEnrichmentDatasetKeys(dto)
-                .whenIBuildEnrichmentDatasetAttributes(Collections.emptyList(), Collections.emptyList(), Collections.emptyList(), geocodesList, Collections.emptyList(), Collections.emptyList())
+                .whenIBuildEnrichmentDatasetAttributes(Collections.emptyList(), Collections.emptyList(), Collections.emptyList(), geocodesList, Collections.emptyList(), Collections.emptyList(), Collections.emptyList(), Collections.emptyList())
                 .whenIBuildEnrichmentRequest(referenceId, "country")
                 .thenEnrichmentRequestShouldHave("country", referenceId);
     }
@@ -297,7 +299,7 @@ public class RequestBuilderTests {
         this.steps
                 .givenISetupRequestBuilder()
                 .whenIBuildEnrichmentDatasetKeys(dto)
-                .whenIBuildEnrichmentDatasetAttributes(Collections.emptyList(), Collections.emptyList(), Collections.emptyList(), geocodesList, Collections.emptyList(), Collections.emptyList())
+                .whenIBuildEnrichmentDatasetAttributes(Collections.emptyList(), Collections.emptyList(), Collections.emptyList(), geocodesList, Collections.emptyList(), Collections.emptyList(), Collections.emptyList(), Collections.emptyList())
                 .whenIBuildEnrichmentRequest(referenceId, country)
                 .thenEnrichmentRequestShouldHave(country, referenceId);
     }
@@ -317,7 +319,7 @@ public class RequestBuilderTests {
         this.steps
                 .givenISetupRequestBuilder()
                 .whenIBuildEnrichmentDatasetKeys(dto)
-                .whenIBuildEnrichmentDatasetAttributes(Collections.emptyList(), Collections.emptyList(), Collections.emptyList(), geocodesList, Collections.emptyList(), Collections.emptyList())
+                .whenIBuildEnrichmentDatasetAttributes(Collections.emptyList(), Collections.emptyList(), Collections.emptyList(), geocodesList, Collections.emptyList(), Collections.emptyList(), Collections.emptyList(), Collections.emptyList())
                 .whenIBuildEnrichmentRequest(referenceId, country)
                 .thenEnrichmentRequestShouldHave(country, referenceId);
     }
@@ -350,7 +352,7 @@ public class RequestBuilderTests {
         exception.expectMessage("The keys field is required.");
         this.steps
                 .givenISetupRequestBuilder()
-                .whenIBuildEnrichmentDatasetAttributes(Collections.emptyList(), Collections.emptyList(), Collections.emptyList(), geocodesList, Collections.emptyList(), Collections.emptyList())
+                .whenIBuildEnrichmentDatasetAttributes(Collections.emptyList(), Collections.emptyList(), Collections.emptyList(), geocodesList, Collections.emptyList(), Collections.emptyList(), Collections.emptyList(), Collections.emptyList())
                 .whenIBuildEnrichmentRequest(referenceId, "country")
                 .thenEnrichmentRequestShouldHave("country", referenceId);
     }
