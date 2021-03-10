@@ -11,19 +11,19 @@ public final class EnrichmentResult implements Result {
      * The ConsumerView Australia - Household data.
      **/
     @SerializedName("aus_cv_household")
-    private EnrichmentDatasetAusCVHousehold ausCvHousehold;
+    private EnrichmentDatasetAusCVHousehold ausCVHousehold;
 
     /**
      * The ConsumerView Australia - Person data.
      **/
     @SerializedName("aus_cv_person")
-    private EnrichmentDatasetAusCVPerson ausCvPerson;
+    private EnrichmentDatasetAusCVPerson ausCVPerson;
 
     /**
      * The ConsumerView Australia - Postcode data.
      **/
     @SerializedName("aus_cv_postcode")
-    private EnrichmentDatasetAusCVPostcode ausCvPostcode;
+    private EnrichmentDatasetAusCVPostcode ausCVPostcode;
 
     /**
      * The Geocodes data.
@@ -55,53 +55,64 @@ public final class EnrichmentResult implements Result {
     @SerializedName("uk_location_complete")
     private EnrichmentDatasetUkLocationComplete ukLocationComplete;
 
+    /**
+     * The NZL regional geocodes data.
+     **/
+    @SerializedName("nzl_regional_geocodes")
+    private EnrichmentDatasetNzlRegionalGeocodes nzlRegionalGeocodes;
 
     /**
-     * Gets the ausCvHousehold.
-     * @return The ausCvHousehold.
+     * The ConsumerView New Zealand - Household data.
+     **/
+    @SerializedName("nzl_cv_household")
+    private EnrichmentDatasetNzlCVHousehold nzlCVHousehold;
+
+    /**
+     * Gets the ausCVHousehold.
+     * @return The ausCVHousehold.
      */
-    public EnrichmentDatasetAusCVHousehold getAusCvHousehold() {
-        return this.ausCvHousehold;
+    public EnrichmentDatasetAusCVHousehold getAusCVHousehold() {
+        return this.ausCVHousehold;
     }
 
     /**
-     * Sets the ausCvHousehold.
-     * @param ausCvHousehold The ausCvHousehold.
+     * Sets the ausCVHousehold.
+     * @param ausCVHousehold The ausCVHousehold.
      */
-    public void setAusCvHousehold(final EnrichmentDatasetAusCVHousehold ausCvHousehold) {
-        this.ausCvHousehold = ausCvHousehold;
+    public void setAusCvHousehold(final EnrichmentDatasetAusCVHousehold ausCVHousehold) {
+        this.ausCVHousehold = ausCVHousehold;
     }
 
     /**
-     * Gets the ausCvPerson.
-     * @return The ausCvPerson.
+     * Gets the ausCVPerson.
+     * @return The ausCVPerson.
      */
-    public EnrichmentDatasetAusCVPerson getAusCvPerson() {
-        return this.ausCvPerson;
+    public EnrichmentDatasetAusCVPerson getAusCVPerson() {
+        return this.ausCVPerson;
     }
 
     /**
-     * Sets the ausCvPerson.
-     * @param ausCvPerson The ausCvPerson.
+     * Sets the ausCVPerson.
+     * @param ausCVPerson The ausCVPerson.
      */
-    public void setAusCvPerson(final EnrichmentDatasetAusCVPerson ausCvPerson) {
-        this.ausCvPerson = ausCvPerson;
+    public void setAusCvPerson(final EnrichmentDatasetAusCVPerson ausCVPerson) {
+        this.ausCVPerson = ausCVPerson;
     }
 
     /**
-     * Gets the ausCvPostcode.
-     * @return The ausCvPostcode.
+     * Gets the ausCVPostcode.
+     * @return The ausCVPostcode.
      */
-    public EnrichmentDatasetAusCVPostcode getAusCvPostcode() {
-        return this.ausCvPostcode;
+    public EnrichmentDatasetAusCVPostcode getAusCVPostcode() {
+        return this.ausCVPostcode;
     }
 
     /**
-     * Sets the ausCvPostcode.
-     * @param ausCvPostcode The ausCvPostcode.
+     * Sets the ausCVPostcode.
+     * @param ausCVPostcode The ausCVPostcode.
      */
-    public void setAusCvPostcode(final EnrichmentDatasetAusCVPostcode ausCvPostcode) {
-        this.ausCvPostcode = ausCvPostcode;
+    public void setAusCvPostcode(final EnrichmentDatasetAusCVPostcode ausCVPostcode) {
+        this.ausCVPostcode = ausCVPostcode;
     }
 
     /**
@@ -182,5 +193,37 @@ public final class EnrichmentResult implements Result {
      */
     public void setUkLocationComplete(final EnrichmentDatasetUkLocationComplete ukLocationComplete) {
         this.ukLocationComplete = ukLocationComplete;
+    }
+
+    /**
+     * Gets the NZL Regional Geocodes.
+     * @return The NZL Regional Geocodes.
+     */
+    public EnrichmentDatasetNzlRegionalGeocodes getNzlRegionalGeocodes() {
+        return this.nzlRegionalGeocodes;
+    }
+
+    /**
+     * Sets the NZL Regional Geocodes.
+     * @param nzlRegionalGeocodes NZL Regional Geocodes.
+     */
+    public void setNzlRegionalGeocodes(final EnrichmentDatasetNzlRegionalGeocodes nzlRegionalGeocodes) {
+        this.nzlRegionalGeocodes = nzlRegionalGeocodes;
+    }
+
+    /**
+     * Gets the nzlCVHousehold.
+     * @return The nzlCVHousehold.
+     */
+    public EnrichmentDatasetNzlCVHousehold getNzlCvHousehold() {
+        return this.nzlCVHousehold;
+    }
+
+    /**
+     * Sets the nzlCVHousehold.
+     * @param nzlCVHousehold The nzlCVHousehold.
+     */
+    public void setNzlCvHousehold(final EnrichmentDatasetNzlCVHousehold nzlCVHousehold) {
+        this.nzlCVHousehold = nzlCVHousehold;
     }
 }

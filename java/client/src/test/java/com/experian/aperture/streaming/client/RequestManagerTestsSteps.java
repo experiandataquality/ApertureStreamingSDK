@@ -344,7 +344,7 @@ final class RequestManagerTestsSteps {
                 .build();
 
         final EnrichmentDatasetAttributes attributes = EnrichmentDatasetAttributesBuilder.builder()
-                .withAusCvPostcodeList(AusCVPostcode.ADULTS_AT_ADDRESS_CODE, AusCVPostcode.ADULTS_AT_ADDRESS_DESCRIPTION)
+                .withAusCVPostcodeList(AusCVPostcode.ADULTS_AT_ADDRESS_CODE, AusCVPostcode.ADULTS_AT_ADDRESS_DESCRIPTION)
                 .build();
 
         return RequestBuilder.builder()

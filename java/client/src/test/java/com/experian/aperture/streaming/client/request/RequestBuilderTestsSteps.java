@@ -90,21 +90,28 @@ final class RequestBuilderTestsSteps {
      * @param geocodesList The geocodes list.
      * @param usaRegionalGeocodesList The USA regional geocodes list.
      * @param ukLocationEssentialList The UK Location Essential list.
+     * @param nzlRegionalGeocodesList The NZL Regional Geocodes list.
+     * @param nzlCvHouseholdList The NZL CV household list.
      * @return The steps.
      */
+    @SuppressWarnings("checkstyle:parameterNumber")
     RequestBuilderTestsSteps whenIBuildEnrichmentDatasetAttributes(final List<AusCVHousehold> ausCvHouseholdList,
                                                                    final List<AusCVPostcode> ausCVPostcodeList,
                                                                    final List<AusCVPerson> ausCVPersonList,
                                                                    final List<Geocodes> geocodesList,
                                                                    final List<UsaRegionalGeocodes> usaRegionalGeocodesList,
-                                                                   final List<UkLocationEssential> ukLocationEssentialList) {
+                                                                   final List<UkLocationEssential> ukLocationEssentialList,
+                                                                   final List<NzlRegionalGeocodes> nzlRegionalGeocodesList,
+                                                                   final List<NzlCVHousehold> nzlCvHouseholdList) {
         this.attributes = EnrichmentDatasetAttributesBuilder.builder()
-                .withAusCvHouseholdList(ausCvHouseholdList.toArray(new AusCVHousehold[ausCvHouseholdList.size()]))
-                .withAusCvPostcodeList(ausCVPostcodeList.toArray(new AusCVPostcode[ausCVPostcodeList.size()]))
-                .withAusCvPersonList(ausCVPersonList.toArray(new AusCVPerson[ausCVPersonList.size()]))
+                .withAusCVHouseholdList(ausCvHouseholdList.toArray(new AusCVHousehold[ausCvHouseholdList.size()]))
+                .withAusCVPostcodeList(ausCVPostcodeList.toArray(new AusCVPostcode[ausCVPostcodeList.size()]))
+                .withAusCVPersonList(ausCVPersonList.toArray(new AusCVPerson[ausCVPersonList.size()]))
                 .withGeocodesList(geocodesList.toArray(new Geocodes[geocodesList.size()]))
                 .withUsaRegionalGeocodesList(usaRegionalGeocodesList.toArray(new UsaRegionalGeocodes[usaRegionalGeocodesList.size()]))
                 .withUkLocationEssentialList(ukLocationEssentialList.toArray(new UkLocationEssential[ukLocationEssentialList.size()]))
+                .withNzlRegionalGeocodesList(nzlRegionalGeocodesList.toArray(new NzlRegionalGeocodes[nzlRegionalGeocodesList.size()]))
+                .withNzlCVHouseholdList(nzlCvHouseholdList.toArray(new NzlCVHousehold[nzlCvHouseholdList.size()]))
                 .build();
         return this;
     }
@@ -201,21 +208,28 @@ final class RequestBuilderTestsSteps {
      * @param geocodesList The expected geocodes list.
      * @param usaRegionalGeocodesList The expected USA regional geocodes list.
      * @param ukLocationEssentialList The expected UK Location Essential list.
+     * @param nzlRegionalGeocodesList The expected NZL Regional Geocodes list.
+     * @param nzlCvHouseholdList The expected NZL CV household list.
      * @return The steps.
      */
+    @SuppressWarnings("checkstyle:parameterNumber")
     RequestBuilderTestsSteps thenEnrichmentDatasetAttributesShouldHave(final List<AusCVHousehold> ausCvHouseholdList,
                                                                        final List<AusCVPostcode> ausCVPostcodeList,
                                                                        final List<AusCVPerson> ausCVPersonList,
                                                                        final List<Geocodes> geocodesList,
                                                                        final List<UsaRegionalGeocodes> usaRegionalGeocodesList,
-                                                                       final List<UkLocationEssential> ukLocationEssentialList) {
+                                                                       final List<UkLocationEssential> ukLocationEssentialList,
+                                                                       final List<NzlRegionalGeocodes> nzlRegionalGeocodesList,
+                                                                       final List<NzlCVHousehold> nzlCvHouseholdList) {
         assertNotNull(this.attributes);
-        assertArrayEquals(this.attributes.getAusCvHousehold().toArray(), ausCvHouseholdList.toArray());
-        assertArrayEquals(this.attributes.getAusCvPostcode().toArray(), ausCVPostcodeList.toArray());
-        assertArrayEquals(this.attributes.getAusCvPerson().toArray(), ausCVPersonList.toArray());
+        assertArrayEquals(this.attributes.getAusCVHousehold().toArray(), ausCvHouseholdList.toArray());
+        assertArrayEquals(this.attributes.getAusCVPostcode().toArray(), ausCVPostcodeList.toArray());
+        assertArrayEquals(this.attributes.getAusCVPerson().toArray(), ausCVPersonList.toArray());
         assertArrayEquals(this.attributes.getGeocodes().toArray(), geocodesList.toArray());
         assertArrayEquals(this.attributes.getUsaRegionalGeocodes().toArray(), usaRegionalGeocodesList.toArray());
         assertArrayEquals(this.attributes.getUkLocationEssential().toArray(), ukLocationEssentialList.toArray());
+        assertArrayEquals(this.attributes.getNzlRegionalGeocodes().toArray(), nzlRegionalGeocodesList.toArray());
+        assertArrayEquals(this.attributes.getNzlCVHousehold().toArray(), nzlCvHouseholdList.toArray());
         return this;
     }
 

@@ -7,49 +7,52 @@ import java.util.List;
 /**
  * Defines the enrichment dataset attributes builder methods.
  */
+@SuppressWarnings("checkstyle:ClassFanOutComplexity")
 public class DefaultEnrichmentDatasetAttributesBuilder implements EnrichmentDatasetAttributesBuilder {
-    private List<AusCVPerson> ausCvPerson = new ArrayList<>();
-    private List<AusCVHousehold> ausCvHousehold = new ArrayList<>();
-    private List<AusCVPostcode> ausCvPostcode = new ArrayList<>();
+    private List<AusCVPerson> ausCVPerson = new ArrayList<>();
+    private List<AusCVHousehold> ausCVHousehold = new ArrayList<>();
+    private List<AusCVPostcode> ausCVPostcode = new ArrayList<>();
     private List<Geocodes> geocodes = new ArrayList<>();
     private List<UsaRegionalGeocodes> usaRegionalGeocodes = new ArrayList<>();
     private List<AusRegionalGeocodes> ausRegionalGeocodes = new ArrayList<>();
     private List<UkLocationEssential> ukLocationEssential = new ArrayList<>();
     private List<UkLocationComplete> ukLocationComplete = new ArrayList<>();
+    private List<NzlRegionalGeocodes> nzlRegionalGeocodes = new ArrayList<>();
+    private List<NzlCVHousehold> nzlCVHouseholds = new ArrayList<>();
 
     /**
      * Specifies whether to include ausCvPerson.
      *
-     * @param ausCvPersonList the ausCvPersonList.
+     * @param ausCVPersonList the ausCvPersonList.
      * @return The enrichment dataset attributes builder.
      */
     @Override
-    public EnrichmentDatasetAttributesBuilder withAusCvPersonList(final AusCVPerson... ausCvPersonList) {
-        this.ausCvPerson.addAll(Arrays.asList(ausCvPersonList));
+    public EnrichmentDatasetAttributesBuilder withAusCVPersonList(final AusCVPerson... ausCVPersonList) {
+        this.ausCVPerson.addAll(Arrays.asList(ausCVPersonList));
         return this;
     }
 
     /**
      * Specifies whether to include ausCvHousehold.
      *
-     * @param ausCvHouseholdList the ausCvHouseholdList.
+     * @param ausCVHouseholdList the ausCvHouseholdList.
      * @return The enrichment dataset attributes builder.
      */
     @Override
-    public EnrichmentDatasetAttributesBuilder withAusCvHouseholdList(final AusCVHousehold... ausCvHouseholdList) {
-        this.ausCvHousehold.addAll(Arrays.asList(ausCvHouseholdList));
+    public EnrichmentDatasetAttributesBuilder withAusCVHouseholdList(final AusCVHousehold... ausCVHouseholdList) {
+        this.ausCVHousehold.addAll(Arrays.asList(ausCVHouseholdList));
         return this;
     }
 
     /**
      * Specifies whether to include ausCvPostcode.
      *
-     * @param ausCvPostcodeList the ausCvPostcodeList.
+     * @param ausCVPostcodeList the ausCvPostcodeList.
      * @return The enrichment dataset attributes builder.
      */
     @Override
-    public EnrichmentDatasetAttributesBuilder withAusCvPostcodeList(final AusCVPostcode... ausCvPostcodeList) {
-        this.ausCvPostcode.addAll(Arrays.asList(ausCvPostcodeList));
+    public EnrichmentDatasetAttributesBuilder withAusCVPostcodeList(final AusCVPostcode... ausCVPostcodeList) {
+        this.ausCVPostcode.addAll(Arrays.asList(ausCVPostcodeList));
         return this;
     }
 
@@ -114,21 +117,48 @@ public class DefaultEnrichmentDatasetAttributesBuilder implements EnrichmentData
     }
 
     /**
+     * Specifies whether to include NZL Regional Geocodes.
+     *
+     * @param nzlRegionalGeocodes the nzlRegionalGeocodes.
+     * @return The enrichment dataset attributes builder.
+     */
+    @Override
+    public  EnrichmentDatasetAttributesBuilder withNzlRegionalGeocodesList(final NzlRegionalGeocodes... nzlRegionalGeocodes) {
+        this.nzlRegionalGeocodes.addAll(Arrays.asList(nzlRegionalGeocodes));
+        return this;
+    }
+
+    /**
+     * Specifies whether to include New Zealand ConsumerView Household.
+     *
+     * @param nzlCVHouseholdList the nzlCvHouseholdList.
+     * @return The enrichment dataset attributes builder.
+     */
+    @Override
+    public  EnrichmentDatasetAttributesBuilder withNzlCVHouseholdList(final NzlCVHousehold... nzlCVHouseholdList) {
+        this.nzlCVHouseholds.addAll(Arrays.asList(nzlCVHouseholdList));
+        return this;
+    }
+
+    /**
      * Builds the enrichment dataset attributes with the defined values.
      *
      * @return The Enrichment dataset attributes builder.
      */
+    @SuppressWarnings("checkstyle:CyclomaticComplexity")
     @Override
     public EnrichmentDatasetAttributes build() {
         final EnrichmentDatasetAttributes attributes = new EnrichmentDatasetAttributes();
-        attributes.setAusCvHousehold(this.ausCvHousehold.size() > 0 ? this.ausCvHousehold : null);
-        attributes.setAusCvPerson(this.ausCvPerson.size() > 0 ? this.ausCvPerson : null);
-        attributes.setAusCvPostcode(this.ausCvPostcode.size() > 0 ? this.ausCvPostcode : null);
+        attributes.setAusCVHousehold(this.ausCVHousehold.size() > 0 ? this.ausCVHousehold : null);
+        attributes.setAusCVPerson(this.ausCVPerson.size() > 0 ? this.ausCVPerson : null);
+        attributes.setAusCVPostcode(this.ausCVPostcode.size() > 0 ? this.ausCVPostcode : null);
         attributes.setGeocodes(this.geocodes.size() > 0 ? this.geocodes : null);
         attributes.setUsaRegionalGeocodes(this.usaRegionalGeocodes.size() > 0 ? this.usaRegionalGeocodes : null);
         attributes.setAusRegionalGeocodes(this.ausRegionalGeocodes.size() > 0 ? this.ausRegionalGeocodes : null);
         attributes.setUkLocationEssential(this.ukLocationEssential.size() > 0 ? this.ukLocationEssential : null);
         attributes.setUkLocationComplete(this.ukLocationComplete.size() > 0 ? this.ukLocationComplete : null);
+        attributes.setNzlRegionalGeocodes(this.nzlRegionalGeocodes.size() > 0 ? this.nzlRegionalGeocodes : null);
+        attributes.setNzlCVHousehold(this.nzlCVHouseholds.size() > 0 ? this.nzlCVHouseholds : null);
         return attributes;
     }
 }

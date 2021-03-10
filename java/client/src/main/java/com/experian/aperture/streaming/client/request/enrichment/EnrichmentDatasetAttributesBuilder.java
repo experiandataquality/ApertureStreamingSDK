@@ -5,28 +5,28 @@ package com.experian.aperture.streaming.client.request.enrichment;
  */
 public interface EnrichmentDatasetAttributesBuilder {
     /**
-     * Specifies to include the AusCvPerson.
+     * Specifies to include the AusCVPerson.
      *
-     * @param ausCvPersonList The ausCvPersonList
+     * @param ausCVPersonList The ausCVPersonList
      * @return The enrichment dataset attributes builder.
      */
-    EnrichmentDatasetAttributesBuilder withAusCvPersonList(AusCVPerson... ausCvPersonList);
+    EnrichmentDatasetAttributesBuilder withAusCVPersonList(AusCVPerson... ausCVPersonList);
 
     /**
      * Specifies to include AusCVHousehold.
      *
-     * @param ausCvHouseholdList The ausCvHouseholdList
+     * @param ausCVHouseholdList The ausCVHouseholdList
      * @return The enrichment dataset attributes builder.
      */
-    EnrichmentDatasetAttributesBuilder withAusCvHouseholdList(AusCVHousehold... ausCvHouseholdList);
+    EnrichmentDatasetAttributesBuilder withAusCVHouseholdList(AusCVHousehold... ausCVHouseholdList);
 
     /**
      * Specifies to include AusCVPostcode.
      *
-     * @param ausCvPostcodeList The ausCvPostcodeList
+     * @param ausCVPostcodeList The ausCvPostcodeList
      * @return The enrichment dataset attributes builder.
      */
-    EnrichmentDatasetAttributesBuilder withAusCvPostcodeList(AusCVPostcode... ausCvPostcodeList);
+    EnrichmentDatasetAttributesBuilder withAusCVPostcodeList(AusCVPostcode... ausCVPostcodeList);
 
     /**
      * Specifies to include Geocodes.
@@ -67,6 +67,22 @@ public interface EnrichmentDatasetAttributesBuilder {
      * @return The enrichment dataset attributes builder.
      */
     EnrichmentDatasetAttributesBuilder withUkLocationCompleteList(UkLocationComplete... ukLocationCompleteList);
+
+    /*
+    * Specifies whether to inclue NZL Regional Geocodes.
+    *
+    * @param nzlRegionalGeocodesList the nzlRegionalGeocodesList.
+    * @return The enrichment dataset attributes builder.
+    */
+    EnrichmentDatasetAttributesBuilder withNzlRegionalGeocodesList(NzlRegionalGeocodes... nzlRegionalGeocodesList);
+
+    /**
+     * Specifies whether to include NZL CV Household.
+     *
+     * @param nzlCVHouseholdList the nzlCVHouseholdList.
+     * @return The enrichment dataset attributes builder.
+     */
+    EnrichmentDatasetAttributesBuilder withNzlCVHouseholdList(NzlCVHousehold... nzlCVHouseholdList);
 
     /**
      * Builds the enrichment dataset attributes with the defined values.
